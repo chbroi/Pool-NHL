@@ -154,15 +154,3 @@ export function initializeRulesUi() {
       appState.round4Deadline
     );
 }
-
-function formatDeadline(value) {
-
-  if (!value) {
-    return "TBD";
-  }
-
-  return new Date(value)
-    .toLocaleString();
-
-}
-
