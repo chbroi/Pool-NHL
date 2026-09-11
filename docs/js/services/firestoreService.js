@@ -1,7 +1,7 @@
 
 import { db } from "../firebase.js";
 import { appState } from "../app/state.js";
-import { collection, query, where, getDocs, addDoc, updateDoc} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { collection, query, where, getDocs, addDoc, updateDoc,doc} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 
 /**
