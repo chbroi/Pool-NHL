@@ -3,6 +3,7 @@ import * as funcs from "../functions.js";
 import { TABS } from "../constants.js";
 import { showRulesModal } from "./rulesModal.js";
 import { renderHome, renderScoring, renderProfile, renderStats, renderAdmin, renderNhlStats, loadPredictionsDetails, renderFullLeaderboard, renderSubmissionStatus} from "../ui/render.js";
+import { loadExistingSubmission } from "../services/predictionService.js";
 
 const tabRenderers = { 
   home: () => renderHome(),
@@ -68,6 +69,9 @@ if (!funcs.isSubmissionOpen()) {
           ${funcs.formatDeadline(currentDeadline)}
         </strong>
       </p>
+      <p>
+        Dernière version enregistrée chargée automatiquement.
+      </p>
     </div>
   `;
 
@@ -88,6 +92,7 @@ if (!funcs.isSubmissionOpen()) {
           roundDiv.style.display = "block";
         }
       }
+      await loadExistingSubmission();
       await renderSubmissionStatus();
       form.style.display = "block";
     }  
