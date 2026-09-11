@@ -2,6 +2,7 @@ import { appState } from "./state.js";
 import { acceptRules } from "../services/userService.js";
 import { showTab } from "./tabs.js";
 import { POOL_CONFIG } from "../constants.js";
+import { formatDeadline} from "../functions.js";
 
 export function showRulesModal() {
 
