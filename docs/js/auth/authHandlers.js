@@ -9,6 +9,8 @@ import { attachRound1Listeners, attachRound2Listeners, attachRound3Listeners, at
 import { generateRound }from "../ui/render.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { initializeRulesUi } from "../app/rulesModal.js";
+
 
 
 export function initializeAuth() {
@@ -173,6 +175,7 @@ async function handleLoggedInUser( user, config, results) {
       appState.round2Deadline = config.round2Deadline;
       appState.round3Deadline = config.round3Deadline;
       appState.round4Deadline = config.round4Deadline;
+      initializeRulesUi();
       appState.paid = participantDoc.data()?.paid ?? false;
       funcs.refreshHelperMessage();
     
