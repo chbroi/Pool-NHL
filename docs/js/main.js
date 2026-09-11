@@ -16,7 +16,7 @@ import { showRulesModal } from "./app/rulesModal.js";
 import { submitPredictions } from "./services/predictionService.js";
 import { initializeTheme} from "./app/theme.js";
 import { initializeAuth} from "./auth/authHandlers.js";
-import { submitFeedback } from "./services/feedback.js";
+import { submitFeedback } from "./services/predictionService.js";
 import { updateConnSmythePlayers } from "./services/nhlService.js";
 import { showTab } from "./app/tabs.js";
 
