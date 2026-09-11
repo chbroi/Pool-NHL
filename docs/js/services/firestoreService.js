@@ -151,20 +151,9 @@ export async function addAdminLog( action, admin) {
 
 }
 
-export async function updatePrediction(
-  docId,
-  data
-) {
+export async function updatePrediction(docId, data) {
 
-  await updateDoc(
-    doc(
-      db,
-      "predictions",
-      docId
-    ),
-    data
-  );
-
+  await updateDoc(doc(db,"predictions",docId),data);
 }
 
 
