@@ -1,13 +1,7 @@
 
 import { db } from "../firebase.js";
 import { appState } from "../app/state.js";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  addDoc
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { collection, query, where, getDocs, addDoc, updateDoc} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 
 /**
@@ -119,10 +113,7 @@ export async function getAdminLogs() {
 
 }
 
-export async function addAdminLog(
-  action,
-  admin
-) {
+export async function addAdminLog( action, admin) {
 
   return await addDoc(
     collection(
@@ -137,5 +128,25 @@ export async function addAdminLog(
   );
 
 }
+  export async function getPrediction(userId, round) {
+
+  const q = query(
+    collection(db, "predictions"),
+    where("userId", "==", userId),
+    where("round", "==", round)
+  );
+
+  const snapshot =
+    await getDocs(q);
+
+  if (snapshot.empty) {
+    return null;
+  }
+
+  return snapshot.docs[0];
+
+}
+
+
 
 
