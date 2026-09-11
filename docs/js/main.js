@@ -5,7 +5,7 @@ import { signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.
 import { POOL_CONFIG} from "./constants.js";
 import { appState } from "./app/state.js"
 import { toggleSubmissionOpen, updateSubmissionRound, clearAdminHistory, updateDeadline, deletePredictionAdmin, togglePayment, deleteFeedback} from "./admin/adminActions.js";
-import { showRulesModal } from "./app/rulesModal.js";
+import { showRulesModal,initializeRulesUi } from "./app/rulesModal.js";
 import { submitPredictions } from "./services/predictionService.js";
 import { initializeTheme} from "./app/theme.js";
 import { initializeAuth} from "./auth/authHandlers.js";
@@ -25,41 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (currentDeadline && Date.now() > currentDeadline) {
     appState.submissionOpen =false;
   }
-  
-    document.querySelectorAll(".rulesEntryFee")
-    .forEach(el => {
-      el.textContent = POOL_CONFIG.entryFee;
-    });
-    const entryFeeAmount =
-    document.getElementById("entryFeeAmount");
-  
-  if (entryFeeAmount) {
-    entryFeeAmount.textContent =
-      POOL_CONFIG.entryFee;
-  }
-    const backBtn =
-    document.getElementById(
-      "backToModalBtn"
-    );
-  
-  if (backBtn) {
-  
-    backBtn.addEventListener(
-      "click",
-      () => {
-  
-        document.getElementById(
-          "rulesBackContainer"
-        ).style.display = "none";
-  
-        showRulesModal();
-  
-      }
-    );
-  
-  }
-
-initializeTheme();
+  initializeRulesUi();
+  initializeTheme();
 
 });
 
