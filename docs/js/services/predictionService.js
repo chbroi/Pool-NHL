@@ -1,6 +1,6 @@
 import { appState } from "../app/state.js";
 import { showTab } from "../app/tabs.js";
-import { hasSubmitted,submitPrediction} from "./firestoreService.js";
+import { getPrediction,submitPrediction,updatePrediction} from "./firestoreService.js";
 
 export async function submitPredictions() {
 
@@ -9,12 +9,8 @@ export async function submitPredictions() {
     return;
   }
 
-  const alreadyDone = await hasSubmitted ( appState.user.uid, appState.submission);
+  const existingPrediction = await getPrediction(appState.user.uid, appState.submission);
 
-  if (alreadyDone) {
-    alert("Tu as déjà soumis pour cette ronde.");
-    return;
-  }
 
   if (!confirm("Confirmer la soumission?")) return;
 
@@ -29,23 +25,31 @@ export async function submitPredictions() {
   try {
 
     // 1. FIRESTORE (SEULEMENT DATA)
-    await submitPrediction( {
-      userId: appState.user.uid,
-      userName: appState.user.displayName,
-      round: appState.submission,
-      picks: data,
-      timestamp: Date.now()
-    });
+    const payload = {
+  userId: appState.user.uid,
+  userName: appState.user.displayName,
+  round: appState.submission,
+  picks: data,
+  timestamp: Date.now(),
+  updatedAt: Date.now()
+};
 
-    // 2. UI UPDATE (APRÈS)
-    alert("Prédictions soumises !");
+if (existingPrediction) {
+
+  await updatePrediction(
+    existingPrediction.id,
+    payload
+  );
+
+} else {
+
+  await submitPrediction(
+    payload
+  );
+
+}
 
     appState.hasSubmitted = true;
-
-    document.getElementById("submitBtn").disabled = true;
-
-    document.querySelectorAll("#predictionForm select, #predictionForm input")
-      .forEach(el => el.disabled = true);
 
     const tabs = document.getElementById("tabs");
     if (tabs) tabs.style.display = "block";
