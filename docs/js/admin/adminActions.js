@@ -33,37 +33,6 @@ export async function toggleSubmissionOpen(status) {
 if (document.getElementById("submitTab").style.display === "block") {
 showTab("submit");
 }
-  const helper =
-  document.getElementById(
-    "helperMessage"
-  );
-
-if (helper) {
-
-  if (status) {
-    const currentDeadline = appState[
-    `round${appState.submission}Deadline`];
-
-    helper.innerHTML =
-      `⏳ Vous avez jusqu'au ${
-        new Date(
-          currentDeadline
-        ).toLocaleString()
-      } pour soumettre vos prédictions.`;
-
-  } else {
-
-    helper.innerHTML =
-      "🔒 Prédictions terminées. Revenez plus tard.";
-
-  }
-}
-  
-  alert(
-    status
-    ? "Soumissions ouvertes"
-    : "Soumissions fermées"
-  );
 funcs.refreshHelperMessage();
 };
 
