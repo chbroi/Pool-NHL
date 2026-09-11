@@ -2,21 +2,18 @@
 
 import * as funcs from "./functions.js";
 import { auth, db, GoogleAuthProvider } from "./firebase.js";
-import {hasSubmitted, submitPrediction,loadPlayers} from "./services/firestoreService.js";
-import { signInWithPopup, onAuthStateChanged,signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { collection, query, where,doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc,onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { round1Ids,SCORING, POOL_CONFIG} from "./constants.js";
+import { loadPlayers} from "./services/firestoreService.js";
+import { signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { collection, query, getDocs} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { POOL_CONFIG} from "./constants.js";
 import { appState } from "./app/state.js"
-import { checkEligibility, loadAppConfig,hasAcceptedRules, acceptRules} from "./services/userService.js";
-import { attachRound1Listeners, attachRound2Listeners, attachRound3Listeners, attachConnSmytheListeners} from "./ui/listeners.js";
-import { loadPredictionsDetails, renderHome, renderFullLeaderboard, renderScoring, generateRound, renderSubmissionStatus, renderProfile, renderStats, renderAdmin, renderNhlStats, reloadFeedbackSection } from "./ui/render.js";
 import { setupRealtimeListeners} from "./services/realtimeService.js";
 import { toggleSubmissionOpen, updateSubmissionRound, clearAdminHistory, updateDeadline, deletePredictionAdmin, togglePayment, deleteFeedback} from "./admin/adminActions.js";
 import { showRulesModal } from "./app/rulesModal.js";
 import { submitPredictions } from "./services/predictionService.js";
 import { initializeTheme} from "./app/theme.js";
 import { initializeAuth} from "./auth/authHandlers.js";
-import { submitFeedback } from "./services/predictionService.js";
+import { submitFeedback } from "./profile/feedback.js";
 import { updateConnSmythePlayers } from "./services/nhlService.js";
 import { showTab } from "./app/tabs.js";
 
