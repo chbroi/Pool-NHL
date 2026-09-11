@@ -504,7 +504,7 @@ export function refreshHelperMessage() {
     if (!appState.submissionOpen) {
 
         helper.innerHTML =
-            "🔒 Les soumissions sont actuellement fermées.";
+            "🔒 Les soumissions sont actuellement fermées. Revenez plus tard";
 
         return;
     }
@@ -525,13 +525,22 @@ export function refreshHelperMessage() {
 
         • Date limite :
         <strong>
-            ${new Date(deadline)
-                .toLocaleString("fr-CA")}
+            ${formatDeadline(currentDeadline)}
         </strong>
 
     `;
 }
 
+export function formatDeadline(value) {
+
+  if (!value) {
+    return "TBD";
+  }
+
+  return new Date(value)
+    .toLocaleString();
+
+}
 
 export function getTopScorers(players) {
 
