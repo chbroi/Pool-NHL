@@ -124,5 +124,43 @@ export function initializeRulesUi() {
     );
 
   }
+  document.getElementById(
+    "round1DeadlineDisplay"
+  ).textContent =
+    formatDeadline(
+      appState.round1Deadline
+    );
+
+  document.getElementById(
+    "round2DeadlineDisplay"
+  ).textContent =
+    formatDeadline(
+      appState.round2Deadline
+    );
+
+  document.getElementById(
+    "round3DeadlineDisplay"
+  ).textContent =
+    formatDeadline(
+      appState.round3Deadline
+    );
+
+  document.getElementById(
+    "round4DeadlineDisplay"
+  ).textContent =
+    formatDeadline(
+      appState.round4Deadline
+    );
+}
+
+function formatDeadline(value) {
+
+  if (!value) {
+    return "TBD";
+  }
+
+  return new Date(value)
+    .toLocaleString();
 
 }
+
