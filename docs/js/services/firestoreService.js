@@ -128,7 +128,8 @@ export async function addAdminLog( action, admin) {
   );
 
 }
-  export async function getPrediction(userId, round) {
+  export async function getPrediction(userId,
+  round) {
 
   const q = query(
     collection(db, "predictions"),
@@ -143,7 +144,10 @@ export async function addAdminLog( action, admin) {
     return null;
   }
 
-  return snapshot.docs[0];
+  return {
+    id: snapshot.docs[0].id,
+    ...snapshot.docs[0].data()
+  };
 
 }
 
