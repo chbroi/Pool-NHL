@@ -501,10 +501,17 @@ export function refreshHelperMessage() {
             `round${appState.submission}Deadline`
         ];
 
-    if (!appState.submissionOpen) {
+    const deadlinePassed =
+        deadline &&
+        Date.now() > deadline;
+
+    if (
+        !appState.submissionOpen ||
+        deadlinePassed
+    ) {
 
         helper.innerHTML =
-            "🔒 Les soumissions sont actuellement fermées. Revenez plus tard";
+            "🔒 Les soumissions sont actuellement fermées. Revenez plus tard.";
 
         return;
     }
@@ -517,7 +524,6 @@ export function refreshHelperMessage() {
     };
 
     helper.innerHTML = `
-
         🏒 Soumission active :
         <strong>
             ${roundNames[appState.submission]}
@@ -527,8 +533,8 @@ export function refreshHelperMessage() {
         <strong>
             ${formatDeadline(deadline)}
         </strong>
-
     `;
+
 }
 
 export function formatDeadline(value) {
@@ -586,4 +592,22 @@ export function getTopGoalies(players) {
                 a.gaa -
                 b.gaa
         );
+}
+
+export function isSubmissionOpen() {
+
+    const deadline =
+        appState[
+            `round${appState.submission}Deadline`
+        ];
+
+    const deadlinePassed =
+        deadline &&
+        Date.now() > deadline;
+
+    return (
+        appState.submissionOpen &&
+        !deadlinePassed
+    );
+
 }
