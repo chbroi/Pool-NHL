@@ -362,7 +362,30 @@ export function fetchParticipants() {
 export function checkIfReadyToSubmit(currentSubmission) {
 
   const requiredFields = [];
+  const missing = getMissingSelections();
+  const missingDiv = document.getElementById("missingSelections");
 
+  if (missingDiv) {
+  
+    missingDiv.innerHTML =
+      missing.length
+        ? `
+          <strong>
+            Choix manquants :
+          </strong>
+  
+          <ul>
+            ${
+              missing.map(
+                item =>
+                  `<li>${item}</li>`
+              ).join("")
+            }
+          </ul>
+        `
+        : "";
+  
+  }
   // ✅ seulement les rounds visibles
   if (currentSubmission === 1) {
     requiredFields.push(...round1Ids);
@@ -606,5 +629,31 @@ export function isSubmissionOpen() {
         appState.submissionOpen &&
         !deadlinePassed
     );
+
+}
+
+export function getMissingSelections() {
+
+  const missing = [];
+
+  document
+    .querySelectorAll(
+      "#predictionForm select"
+    )
+    .forEach(select => {
+
+      if (!select.value) {
+
+        const label =
+          select.dataset.label ||
+          select.name;
+
+        missing.push(label);
+
+      }
+
+    });
+
+  return missing;
 
 }
