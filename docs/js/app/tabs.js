@@ -92,8 +92,9 @@ if (!funcs.isSubmissionOpen()) {
           roundDiv.style.display = "block";
         }
       }
-      await loadExistingSubmission();
+      
       await renderSubmissionStatus();
+      await loadExistingSubmission();
       form.style.display = "block";
     }  
 
