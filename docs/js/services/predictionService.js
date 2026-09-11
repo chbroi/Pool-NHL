@@ -61,3 +61,39 @@ if (existingPrediction) {
     alert("Erreur: " + err.message);
   }
 };
+
+
+export async function loadExistingSubmission() {
+
+  if (!appState.user) {
+    return;
+  }
+
+  const prediction =
+    await getPrediction(
+      appState.user.uid,
+      appState.submission
+    );
+
+  if (!prediction) {
+    return;
+  }
+
+  const picks =
+    prediction.picks;
+
+  Object.entries(picks)
+    .forEach(([key, value]) => {
+
+      const field =
+        document.querySelector(
+          `[name="${key}"]`
+        );
+
+      if (field) {
+        field.value = value;
+      }
+
+    });
+
+}
