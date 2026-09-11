@@ -62,13 +62,6 @@ if (!funcs.isSubmissionOpen()) {
         Vous pouvez modifier votre soumission
         jusqu'à la date limite.
       </p>
-
-      <p>
-        Date limite :
-        <strong>
-          ${funcs.formatDeadline(currentDeadline)}
-        </strong>
-      </p>
       <p>
         Dernière version enregistrée chargée automatiquement.
       </p>
