@@ -505,10 +505,7 @@ export function refreshHelperMessage() {
         deadline &&
         Date.now() > deadline;
 
-    if (
-        !appState.submissionOpen ||
-        deadlinePassed
-    ) {
+    if (!isSubmissionOpen()) {
 
         helper.innerHTML =
             "🔒 Les soumissions sont actuellement fermées. Revenez plus tard.";
