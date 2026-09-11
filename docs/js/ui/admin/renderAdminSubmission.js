@@ -1,6 +1,6 @@
 import { appState } from "../../app/state.js";
 import { getAllPredictions } from "../../services/firestoreService.js";
-import * as funcs from "../functions.js";
+import * as funcs from "../../functions.js";
 
 export function renderAdminSubmissionCard() {
   const isOpen = funcs.isSubmissionOpen();
