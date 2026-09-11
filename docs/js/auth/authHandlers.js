@@ -282,5 +282,3 @@ async function handleLoggedInUser( user, config, results) {
   
 }
 
-}
-
