@@ -525,7 +525,7 @@ export function refreshHelperMessage() {
 
         • Date limite :
         <strong>
-            ${formatDeadline(currentDeadline)}
+            ${formatDeadline(deadline)}
         </strong>
 
     `;
