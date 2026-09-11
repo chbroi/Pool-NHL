@@ -1,7 +1,12 @@
 import { appState } from "../../app/state.js";
 import { getAllPredictions } from "../../services/firestoreService.js";
-export function renderAdminSubmissionCard() {
+import * as funcs from "../functions.js";
 
+export function renderAdminSubmissionCard() {
+  const isOpen = funcs.isSubmissionOpen();
+  const deadline = appState[ `round${appState.submission}Deadline`];
+  const deadlinePassed = deadline && Date.now() > deadline;
+  
   return `
 
     <div class="card">
@@ -14,24 +19,22 @@ export function renderAdminSubmissionCard() {
       </p>
 
       <p>
-        <strong>Statut :</strong>
+        <strong>
+          Date limite soumission
+          ${appState.submission} :
+        </strong>
+      
         ${
-          appState.submissionOpen
-            ? "✅ Ouvertes"
-            : "🔒 Fermées"
+          deadlinePassed
+            ? `⚠️ ${funcs.formatDeadline(deadline)} (dépassée)`
+            : funcs.formatDeadline(deadline)
         }
+      
       </p>
-
       <p>
-        <strong>Date limite soumission 1 :</strong>
+        <strong>Date limite soumission ${appState.submission} :</strong>
 
-        ${
-          appState.round1Deadline
-            ? new Date(
-                appState.round1Deadline
-              ).toLocaleString()
-            : "Non configurée"
-        }
+        ${funcs.formatDeadline(appState[`round${appState.submission}Deadline`])}
       </p>
 
     </div>
