@@ -1,4 +1,5 @@
 import { appState } from "./state.js";
+import * as funcs from "../functions.js";
 import { TABS } from "../constants.js";
 import { showRulesModal } from "./rulesModal.js";
 import { renderHome, renderScoring, renderProfile, renderStats, renderAdmin, renderNhlStats, loadPredictionsDetails, renderFullLeaderboard, renderSubmissionStatus} from "../ui/render.js";
@@ -32,7 +33,7 @@ async function handleSubmitTab() {
     if (!form || !tab) return;
 const currentDeadline = appState[`round${appState.submission}Deadline`];
 const deadlinePassed = currentDeadline && Date.now() > currentDeadline;
-if ( !appState.submissionOpen ||  deadlinePassed) {
+if (!isSubmissionOpen()) {
   tab.innerHTML = `
     <div class="card">
 
