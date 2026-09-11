@@ -64,6 +64,7 @@ export const SCORING = {
     }
 
   }
+};
 
  export const TABS = [
   "home",
@@ -77,6 +78,4 @@ export const SCORING = {
   "admin",
   "profile"
 ];
-
-};
 
