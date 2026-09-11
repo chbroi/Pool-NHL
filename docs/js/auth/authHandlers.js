@@ -282,49 +282,5 @@ async function handleLoggedInUser( user, config, results) {
   
 }
 
-
-export function initializeAuth() {
-
-  onAuthStateChanged(
-    auth,
-
-    async user => {
-
-      const {
-        config,
-        results
-      } = await loadAppConfig();
-
-      if (user) {
-
-        try {
-
-          await handleLoggedInUser(
-            user,
-            config,
-            results
-          );
-
-        } catch (err) {
-
-          console.error(err);
-
-          alert(
-            "Erreur d'initialisation : " +
-            err.message
-          );
-
-        }
-
-      } else {
-
-        handleLoggedOutUser();
-
-      }
-
-    }
-
-  );
-
 }
 
