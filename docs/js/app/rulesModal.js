@@ -83,6 +83,12 @@ modal.style.display = "flex";
 
 export function initializeRulesUi() {
 
+  const rulesTab = document.getElementById("rulesTab");
+  if (rulesTab) {
+  rulesTab.innerHTML =getRulesHtml();
+  }
+  
+
   document
     .querySelectorAll(
       ".rulesEntryFee"
