@@ -33,7 +33,7 @@ async function handleSubmitTab() {
     if (!form || !tab) return;
 const currentDeadline = appState[`round${appState.submission}Deadline`];
 const deadlinePassed = currentDeadline && Date.now() > currentDeadline;
-if (!isSubmissionOpen()) {
+if (!funcs.isSubmissionOpen()) {
   tab.innerHTML = `
     <div class="card">
 
