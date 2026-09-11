@@ -34,6 +34,7 @@ async function handleSubmitTab() {
 const currentDeadline = appState[`round${appState.submission}Deadline`];
 const deadlinePassed = currentDeadline && Date.now() > currentDeadline;
 if (!funcs.isSubmissionOpen()) {
+  
   tab.innerHTML = `
     <div class="card">
 
@@ -50,18 +51,28 @@ if (!funcs.isSubmissionOpen()) {
 
   return;
 }
-    if (appState.hasSubmitted) {
-  
-      form.style.display = "none";
-  
-      tab.innerHTML = `
-        <div class="card">
-          <h3>✅ Déjà soumis</h3>
-          <p>Reviens à la prochaine ronde</p>
-        </div>
-      `;
-  
-    } else {
+  if (appState.hasSubmitted) {
+
+  tab.innerHTML = `
+    <div class="card">
+      <h3>✅ Soumission enregistrée</h3>
+
+      <p>
+        Vous pouvez modifier votre soumission
+        jusqu'à la date limite.
+      </p>
+
+      <p>
+        Date limite :
+        <strong>
+          ${funcs.formatDeadline(currentDeadline)}
+        </strong>
+      </p>
+    </div>
+  `;
+
+}
+    
   
       // IMPORTANT → remettre le form si effacé
       if (!tab.querySelector("#predictionForm")) {
@@ -80,7 +91,6 @@ if (!funcs.isSubmissionOpen()) {
       await renderSubmissionStatus();
       form.style.display = "block";
     }  
-}
 
 function handleRulesTab() {
 
