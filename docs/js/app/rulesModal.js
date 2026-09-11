@@ -78,3 +78,51 @@ modal.style.display = "flex";
     showTab("submit");
   };
 };
+
+export function initializeRulesUi() {
+
+  document
+    .querySelectorAll(
+      ".rulesEntryFee"
+    )
+    .forEach(el => {
+      el.textContent =
+        POOL_CONFIG.entryFee;
+    });
+
+  const entryFeeAmount =
+    document.getElementById(
+      "entryFeeAmount"
+    );
+
+  if (entryFeeAmount) {
+
+    entryFeeAmount.textContent =
+      POOL_CONFIG.entryFee;
+
+  }
+
+  const backBtn =
+    document.getElementById(
+      "backToModalBtn"
+    );
+
+  if (backBtn) {
+
+    backBtn.addEventListener(
+      "click",
+      () => {
+
+        document.getElementById(
+          "rulesBackContainer"
+        ).style.display =
+          "none";
+
+        showRulesModal();
+
+      }
+    );
+
+  }
+
+}
