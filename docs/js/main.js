@@ -1,13 +1,9 @@
 //MAIN Script pour le pool
-
-import * as funcs from "./functions.js";
-import { auth, db, GoogleAuthProvider } from "./firebase.js";
+import { auth, GoogleAuthProvider } from "./firebase.js";
 import { loadPlayers} from "./services/firestoreService.js";
 import { signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { collection, query, getDocs} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { POOL_CONFIG} from "./constants.js";
 import { appState } from "./app/state.js"
-import { setupRealtimeListeners} from "./services/realtimeService.js";
 import { toggleSubmissionOpen, updateSubmissionRound, clearAdminHistory, updateDeadline, deletePredictionAdmin, togglePayment, deleteFeedback} from "./admin/adminActions.js";
 import { showRulesModal } from "./app/rulesModal.js";
 import { submitPredictions } from "./services/predictionService.js";
@@ -18,18 +14,7 @@ import { updateConnSmythePlayers } from "./services/nhlService.js";
 import { showTab } from "./app/tabs.js";
 
 
-
-
-// LOGIN
-document.getElementById("loginBtn").addEventListener("click", async () => {
-  const provider = new GoogleAuthProvider();
-  const result = await signInWithPopup(auth, provider); 
-  appState.user = result.user;
-});
-// LOGOUT
-document.getElementById("logoutBtn").addEventListener("click", async () => {
-  await signOut(auth);
-});
+initializeAuthButtons();
 
 document.addEventListener("DOMContentLoaded", () => {
   
@@ -78,10 +63,6 @@ initializeTheme();
 
 await loadPlayers();
 
-const snapshot = await getDocs(
-    collection(db, "players")
-);
-
 initializeAuth();
                   
 
@@ -89,13 +70,7 @@ window.showRulesModal = showRulesModal;
 
 window.showTab = showTab;
 
-
 window.submitPredictions =  submitPredictions;
-
-function isResultAvailable(key) {
-  return appState.results[key] && appState.results[key] !== "";
-}
-
 
 window.submitFeedback = submitFeedback;
 
