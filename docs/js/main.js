@@ -20,11 +20,6 @@ initializeAuthButtons();
 
 document.addEventListener("DOMContentLoaded", () => {
   
-
-  const currentDeadline = appState[`round${appState.submission}Deadline`];
-  if (currentDeadline && Date.now() > currentDeadline) {
-    appState.submissionOpen =false;
-  }
   initializeRulesUi();
   initializeTheme();
 
