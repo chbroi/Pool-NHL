@@ -31,11 +31,6 @@ export function renderAdminSubmissionCard() {
         }
       
       </p>
-      <p>
-        <strong>Date limite soumission ${appState.submission} :</strong>
-
-        ${funcs.formatDeadline(appState[`round${appState.submission}Deadline`])}
-      </p>
 
     </div>
 
