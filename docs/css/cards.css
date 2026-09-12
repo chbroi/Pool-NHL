@@ -124,3 +124,10 @@
       border: 1px solid var(--primary);
       color: var(--primary);
     }
+   .actionBtn:disabled {
+   
+     opacity: .45;
+   
+     cursor: not-allowed;
+   
+   }
