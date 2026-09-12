@@ -10,7 +10,7 @@ export async function submitPredictions() {
   }
 
   const existingPrediction = await getPrediction(appState.user.uid, appState.submission);
-
+  console.log(existingPrediction);
 
   if (!confirm("Confirmer la soumission?")) return;
 
@@ -89,11 +89,19 @@ export async function loadExistingSubmission() {
         document.querySelector(
           `[name="${key}"]`
         );
-
+      console.log(key,value,field);
       if (field) {
         field.value = value;
       }
 
     });
+    document.querySelectorAll(
+  "#predictionForm select"
+).forEach(select => {
 
+  select.dispatchEvent(
+    new Event("change")
+  );
+
+});
 }
