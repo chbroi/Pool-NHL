@@ -2,6 +2,7 @@ import { appState } from "../app/state.js";
 import { showTab } from "../app/tabs.js";
 import { getPrediction,submitPrediction,updatePrediction} from "./firestoreService.js";
 import { attachRound1Listeners, attachRound2Listeners, attachRound3Listeners, attachConnSmytheListeners} from "../ui/listeners.js";
+import { round1Ids } from "../constants.js";
 
 export async function submitPredictions() {
 
