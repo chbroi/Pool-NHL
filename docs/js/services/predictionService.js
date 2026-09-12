@@ -1,6 +1,7 @@
 import { appState } from "../app/state.js";
 import { showTab } from "../app/tabs.js";
 import { getPrediction,submitPrediction,updatePrediction} from "./firestoreService.js";
+import { attachRound1Listeners, attachRound2Listeners, attachRound3Listeners, attachConnSmytheListeners} from "../ui/listeners.js";
 
 export async function submitPredictions() {
 
@@ -82,7 +83,7 @@ export async function loadExistingSubmission() {
   const picks =
     prediction.picks;
 
-  Object.entries(picks)
+ Object.entries(picks)
   .forEach(([key, value]) => {
 
     const field =
@@ -91,16 +92,14 @@ export async function loadExistingSubmission() {
       );
 
     if (field) {
-
       field.value = value;
-
-      field.dispatchEvent(
-        new Event("change")
-      );
-
     }
 
   });
+  attachRound1Listeners();
+  attachRound2Listeners();
+  attachRound3Listeners();
+  attachConnSmytheListeners();
     document.querySelectorAll(
   "#predictionForm select"
 ).forEach(select => {
