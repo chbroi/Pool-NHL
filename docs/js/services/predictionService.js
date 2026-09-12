@@ -84,6 +84,17 @@ export async function loadExistingSubmission() {
   const picks =
     prediction.picks;
 
+  console.log(
+  "Conn Smythe sauvegardé:",
+  picks.Conn_Smythe
+);
+
+console.log(
+  "Valeurs disponibles:",
+  [...document.getElementById("Conn_Smythe").options]
+    .map(o => o.value)
+);
+
   // RONDE 1
   for (const id of round1Ids) {
 
