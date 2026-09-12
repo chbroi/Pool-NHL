@@ -140,12 +140,12 @@ export async function loadExistingSubmission() {
   }
 
    // RONDE 4
-  const round3 = [
+  const round4 = [
     "R4_final_team",
     "R4_final_games"
   ];
 
-  for (const id of round3) {
+  for (const id of round4) {
 
     if (picks[id]) {
 
