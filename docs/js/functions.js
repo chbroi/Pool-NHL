@@ -368,7 +368,13 @@ export function checkIfReadyToSubmit(currentSubmission) {
  document
   .querySelectorAll("#predictionForm select")
   .forEach(select => {
-
+    if (select.value!=appState.originalSubmission[select.name]){
+       select.classList.add("changedSelection");
+    } 
+    else {
+      select.classList.remove("changedSelection");
+      }
+      
     if (!select.value) {
 
       select.classList.add(
