@@ -365,27 +365,25 @@ export function checkIfReadyToSubmit(currentSubmission) {
   const missing = getMissingSelections();
   const missingDiv = document.getElementById("missingSelections");
 
-  if (missingDiv) {
-  
-    missingDiv.innerHTML =
-      missing.length
-        ? `
-          <strong>
-            Choix manquants :
-          </strong>
-  
-          <ul>
-            ${
-              missing.map(
-                item =>
-                  `<li>${item}</li>`
-              ).join("")
-            }
-          </ul>
-        `
-        : "";
-  
-  }
+ document
+  .querySelectorAll("#predictionForm select")
+  .forEach(select => {
+
+    if (!select.value) {
+
+      select.classList.add(
+        "missingSelection"
+      );
+
+    } else {
+
+      select.classList.remove(
+        "missingSelection"
+      );
+
+    }
+
+  });
   // ✅ seulement les rounds visibles
   if (currentSubmission === 1) {
     requiredFields.push(...round1Ids);
@@ -644,9 +642,10 @@ export function getMissingSelections() {
 
       if (!select.value) {
 
-        const label =
-          select.dataset.label ||
-          select.name;
+        const label =select
+    .closest(".section")
+    ?.querySelector("label")
+    ?.textContent;
 
         missing.push(label);
 
