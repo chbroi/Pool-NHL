@@ -49,7 +49,37 @@
     #nhlGoalieSort {
     
       min-width: 180px;
+
+     
     
       margin-right: 12px;
     
     }
+
+
+.missingSelection {
+
+  border: 2px solid #ff9800 !important;
+
+  background-color: rgba(
+    255,
+    152,
+    0,
+    0.15
+  ) !important;
+
+}
+
+[data-theme="dark"]
+.missingSelection {
+
+  border: 2px solid #ffb74d !important;
+
+  background-color: rgba(
+    255,
+    183,
+    77,
+    0.20
+  ) !important;
+
+}
