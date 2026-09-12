@@ -83,18 +83,24 @@ export async function loadExistingSubmission() {
     prediction.picks;
 
   Object.entries(picks)
-    .forEach(([key, value]) => {
+  .forEach(([key, value]) => {
 
-      const field =
-        document.querySelector(
-          `[name="${key}"]`
-        );
-      console.log(key,value,field);
-      if (field) {
-        field.value = value;
-      }
+    const field =
+      document.querySelector(
+        `[name="${key}"]`
+      );
 
-    });
+    if (field) {
+
+      field.value = value;
+
+      field.dispatchEvent(
+        new Event("change")
+      );
+
+    }
+
+  });
     document.querySelectorAll(
   "#predictionForm select"
 ).forEach(select => {
