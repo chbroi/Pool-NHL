@@ -110,3 +110,121 @@ export async function loadExistingSubmission() {
 
 });
 }
+
+
+export async function loadExistingSubmission() {
+
+  if (!appState.user) return;
+
+  const prediction =
+    await getPrediction(
+      appState.user.uid,
+      appState.submission
+    );
+
+  if (!prediction) return;
+
+  const picks =
+    prediction.picks;
+
+  // RONDE 1
+  for (const id of round1Ids) {
+
+    if (picks[id]) {
+
+      await setFieldValue(
+        id,
+        picks[id]
+      );
+
+    }
+
+  }
+
+  // RONDE 2
+  const round2 = [
+    "R2_EST_1_team",
+    "R2_EST_1_games",
+    "R2_EST_2_team",
+    "R2_EST_2_games",
+    "R2_WEST_1_team",
+    "R2_WEST_1_games",
+    "R2_WEST_2_team",
+    "R2_WEST_2_games"
+  ];
+
+  for (const id of round2) {
+
+    if (picks[id]) {
+
+      await setFieldValue(
+        id,
+        picks[id]
+      );
+
+    }
+
+  }
+
+    // RONDE 3
+  const round3 = [
+    "R3_EST_1_team",
+    "R3_EST_1_games",
+    "R3_WEST_1_team",
+    "R3_WEST_1_games"
+  ];
+
+  for (const id of round3) {
+
+    if (picks[id]) {
+
+      await setFieldValue(
+        id,
+        picks[id]
+      );
+
+    }
+
+  }
+
+   // RONDE 4
+  const round3 = [
+    "R4_final_team",
+    "R4_final_games"
+  ];
+
+  for (const id of round3) {
+
+    if (picks[id]) {
+
+      await setFieldValue(
+        id,
+        picks[id]
+      );
+
+    }
+
+  }
+
+}
+
+async function setFieldValue(name, value) {
+
+  const field =
+    document.querySelector(
+      `[name="${name}"]`
+    );
+
+  if (!field) return;
+
+  field.value = value;
+
+  field.dispatchEvent(
+    new Event("change")
+  );
+
+  await new Promise(resolve =>
+    setTimeout(resolve, 0)
+  );
+
+}
