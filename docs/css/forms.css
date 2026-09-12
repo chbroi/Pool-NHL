@@ -83,3 +83,9 @@
   ) !important;
 
 }
+
+.missingSelection option {
+
+  color: inherit;
+
+}
