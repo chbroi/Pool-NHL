@@ -26,6 +26,11 @@ body[data-theme="light"] .leaderboardTable td {
       width: 100%;
     text-align: center;
       border-collapse: collapse;
+  display: block;
+
+  overflow-x: auto;
+
+  white-space: nowrap;
     
     }
 
