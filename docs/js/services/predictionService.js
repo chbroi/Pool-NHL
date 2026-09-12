@@ -77,6 +77,10 @@ export async function loadExistingSubmission() {
 
   if (!prediction) return;
 
+  appState.originalSubmission =
+  structuredClone(
+    prediction.picks
+  );
   const picks =
     prediction.picks;
 
