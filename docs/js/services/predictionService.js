@@ -117,6 +117,30 @@ console.log(
     }
 
   }
+  const round1Games = [
+  "R1_EST_1_games",
+  "R1_EST_2_games",
+  "R1_EST_3_games",
+  "R1_EST_4_games",
+  "R1_WEST_1_games",
+  "R1_WEST_2_games",
+  "R1_WEST_3_games",
+  "R1_WEST_4_games"
+];
+
+for (const id of round1Games) {
+
+  if (picks[id]) {
+
+    await setFieldValue(
+      id,
+      picks[id]
+    );
+
+  }
+
+}
+
 
   // RONDE 2
   const round2 = [
@@ -182,6 +206,19 @@ console.log(
     }
 
   }
+// Conn Smythe
+  await setFieldValue(
+  "Conn_Smythe",
+  picks.Conn_Smythe
+);
+  if (picks.Conn_Smythe) {
+
+  await setFieldValue(
+    "Conn_Smythe",
+    picks.Conn_Smythe
+  );
+
+}
 
 }
 
