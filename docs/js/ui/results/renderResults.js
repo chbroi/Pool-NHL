@@ -11,7 +11,7 @@ export async function loadPredictionsDetails() {
   const round1Matchups = await getRound1Matchups();
   const round1Map = {};
   round1Matchups.forEach(m => {
-    round1Map[m.id] = `${getTeamLogo(m.team)}${m.team1} vs ${getTeamLogo(m.team2)}${m.team2}`;
+    round1Map[m.id] = `${getTeamLogo(m.team1)}${m.team1} vs ${getTeamLogo(m.team2)}${m.team2}`;
   });
   const container = document.getElementById("resultsTab");
   const predictions = await getAllPredictions();
