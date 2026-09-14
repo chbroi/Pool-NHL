@@ -361,69 +361,35 @@ export function fetchParticipants() {
 
 export function checkIfReadyToSubmit(currentSubmission) {
 
-  const requiredFields = [];
-  const missing = getMissingSelections();
-  const missingDiv = document.getElementById("missingSelections");
+const missing = getMissingSelections(currentSubmission);
 
- document
-  .querySelectorAll("#predictionForm select")
+document
+  .querySelectorAll(
+    "#predictionForm select"
+  )
   .forEach(select => {
-    if (select.value!=appState.originalSubmission[select.name]){
-       select.classList.add("changedSelection");
-    } 
-    else {
-      select.classList.remove("changedSelection");
-      }
-      
-    if (!select.value) {
 
-      select.classList.add(
-        "missingSelection"
+    select.classList.remove(
+      "missingSelection"
+    );
+
+    const missingField =
+      missing.find(
+        m =>
+          m.id === select.id
       );
 
-    } else {
+    if (missingField) {
 
-      select.classList.remove(
+      select.classList.add(
         "missingSelection"
       );
 
     }
 
   });
-  // ✅ seulement les rounds visibles
-  if (currentSubmission === 1) {
-    requiredFields.push(...round1Ids);
-  }
 
-  if (currentSubmission <= 2) {
-    requiredFields.push(
-      "R2_EST_1_team", "R2_EST_1_games",
-      "R2_EST_2_team", "R2_EST_2_games",
-      "R2_WEST_1_team", "R2_WEST_1_games",
-      "R2_WEST_2_team", "R2_WEST_2_games"
-    );
-  }
-
-  if (currentSubmission <= 3) {
-    requiredFields.push(
-      "R3_EST_1_team", "R3_EST_1_games",
-      "R3_WEST_1_team", "R3_WEST_1_games"
-    );
-  }
-
-  const dynamicFields = ["R4_final_team", "R4_final_games", "Conn_Smythe"];
-
-  const allFilled = [...requiredFields, ...dynamicFields].every(id => {
-
-    const el = document.getElementById(id);
-
-    if (!el) return true;
-
-    const value = el.value?.trim();
-    return value !== "";
-  });
-
-  document.getElementById("submitBtn").disabled = !allFilled;
+  document.getElementById("submitBtn").disabled =  missing.length > 0;
 }
 
 
@@ -636,29 +602,86 @@ export function isSubmissionOpen() {
 
 }
 
-export function getMissingSelections() {
+export function getMissingSelections(currentSubmission) {
 
   const missing = [];
 
-  document
-    .querySelectorAll(
-      "#predictionForm select"
-    )
-    .forEach(select => {
+  const requiredFields =
+    getRequiredFields(currentSubmission);
 
-      if (!select.value) {
+  requiredFields.forEach(id => {
 
-        const label =select
-    .closest(".section")
-    ?.querySelector("label")
-    ?.textContent;
+    const el =
+      document.getElementById(id);
 
-        missing.push(label);
+    if (!el) return;
 
-      }
+    if (!el.value) {
 
-    });
+      const label =
+        document
+          .querySelector(
+            `label[for="${id}"]`
+          )
+          ?.textContent
+          ??
+        id;
+
+      missing.push({
+        id,
+        label
+      });
+
+    }
+
+  });
 
   return missing;
+
+}
+
+export function getRequiredFields(currentSubmission) {
+
+  const requiredFields = [];
+
+  if (currentSubmission === 1) {
+    requiredFields.push(...round1Ids);
+
+    // AJOUTER les games R1
+    requiredFields.push(
+      'R1_EST_1_games',
+      'R1_EST_2_games',
+      'R1_EST_3_games',
+      'R1_EST_4_games',
+      'R1_WEST_1_games',
+      'R1_WEST_2_games',
+      'R1_WEST_3_games',
+      'R1_WEST_4_games'
+    );
+  }
+
+  if (currentSubmission <= 2) {
+    requiredFields.push(
+      "R2_EST_1_team", "R2_EST_1_games",
+      "R2_EST_2_team", "R2_EST_2_games",
+      "R2_WEST_1_team", "R2_WEST_1_games",
+      "R2_WEST_2_team", "R2_WEST_2_games"
+    );
+  }
+
+  if (currentSubmission <= 3) {
+    requiredFields.push(
+      "R3_EST_1_team", "R3_EST_1_games",
+      "R3_WEST_1_team", "R3_WEST_1_games"
+    );
+  }
+
+  requiredFields.push(
+    "R4_final_team",
+    "R4_final_games",
+    "Conn_Smythe"
+  );
+
+  return requiredFields;
 
 }
