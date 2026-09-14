@@ -387,8 +387,7 @@ export async function generateRound(roundNumber) {
 
     html += `
       <div class="matchup">
-        <label>${team1} vs ${team2}</label>
-
+        <label>  ${getTeamLogo(team1)}${team1}  vs ${getTeamLogo(team2)}${team2} </label>
         <select name="${match.id}_team" id="${match.id}_team">
           <option value="">Choisir</option>
           <option value="${team1}">${team1}</option>
