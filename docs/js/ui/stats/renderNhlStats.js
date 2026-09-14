@@ -1,4 +1,5 @@
 import { appState } from "../../app/state.js";
+import { getTeamLogo } from "../../constants.js";
 
 
 export function getPlayerStats( players, metric, seasonType) {
@@ -358,7 +359,7 @@ export function renderNhlStatsTable() {
 
             <td>${player.name}</td>
 
-            <td>${player.team}</td>
+            <td>${getTeamLogo(player.team)}${player.team}</td>
 
             <td>
               ${
@@ -467,7 +468,7 @@ export function renderNhlStatsTable() {
 
           <td>${player.position}</td>
 
-          <td>${player.team}</td>
+          <td>${getTeamLogo(player.team)}${player.team}</td>
 
           <td>
             ${
