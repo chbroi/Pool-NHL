@@ -373,7 +373,22 @@ document
     select.name
   ];
 
-if (
+const isMissing =
+  !select.value;
+
+select.classList.remove(
+  "missingSelection",
+  "changedSelection"
+);
+
+if (isMissing) {
+
+  select.classList.add(
+    "missingSelection"
+  );
+
+}
+else if (
   originalValue !== undefined &&
   select.value !== originalValue
 ) {
@@ -382,31 +397,7 @@ if (
     "changedSelection"
   );
 
-} else {
-
-  select.classList.remove(
-    "changedSelection"
-  );
-
 }
-
-    select.classList.remove(
-      "missingSelection"
-    );
-
-    const missingField =
-      missing.find(
-        m =>
-          m.id === select.id
-      );
-
-    if (missingField) {
-
-      select.classList.add(
-        "missingSelection"
-      );
-
-    }
 
   });
 
