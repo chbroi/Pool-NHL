@@ -1,6 +1,6 @@
 //Ensemble des fonctions utiliser pour le pool.
 let participants = [];
-import { round1Ids} from "./constants.js";
+import { round1Ids, getTeamLogo} from "./constants.js";
 import { appState } from "./app/state.js";
 
 export function confirmEngagement() {
@@ -44,7 +44,7 @@ export function showRoundFromData(roundNumber, data) {
 
     if (team1 && team2) {
 
-      label.textContent = `${team1} vs ${team2}`;
+      label.textContent = ` ${getTeamLogo(team1)} ${team1} vs ${getTeamLogo(team2)} ${team2}`;
 
       select.innerHTML = `
         <option value="">Choisir</option>
@@ -241,7 +241,7 @@ export function createRound2Matchups(currentSubmission, round1Ids) {
     const select = document.getElementById(selectId);
     const label = document.getElementById(labelId);
 
-    label.textContent = `${team1} vs ${team2}`;
+    label.textContent = `${getTeamLogo(team1)} ${team1} vs ${getTeamLogo(team2)} ${team2}`;
     select.innerHTML = `<option value="">Choisir</option>
                         <option value="${team1}">${team1}</option>
                         <option value="${team2}">${team2}</option>`;
@@ -283,7 +283,7 @@ export function createRound3Matchups(currentSubmission) {
 
     if (!select || !label) return;
 
-    label.textContent = `${team1} vs ${team2}`;
+    label.textContent = `${getTeamLogo(team1)} ${team1} vs ${getTeamLogo(team2)} ${team2}`;
 
     select.innerHTML = `
       <option value="">Choisir</option>
@@ -320,7 +320,7 @@ export function createRound4Matchup() {
 
   if (!label || !select) return;
 
-  label.textContent = `${team1} vs ${team2}`;
+  label.textContent = `${getTeamLogo(team1)} ${team1} vs ${getTeamLogo(team2)} ${team2}`;
 
   select.innerHTML = `
     <option value="">Choisir</option>
