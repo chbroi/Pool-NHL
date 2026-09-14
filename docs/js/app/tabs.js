@@ -56,18 +56,34 @@ if (!funcs.isSubmissionOpen()) {
 
   tab.innerHTML = `
     <div class="card">
-      <h3>✅ Soumission enregistrée</h3>
+
+      <h3>
+        ✅ Soumission enregistrée
+      </h3>
 
       <p>
         Vous pouvez modifier votre soumission
         jusqu'à la date limite.
       </p>
+
       <p>
         Dernière version enregistrée chargée automatiquement.
       </p>
+
+    </div>
+
+    <div class="card legendCard">
+
+      <div>
+        🟧 Choix à compléter
+      </div>
+
+      <div>
+        🟩 Modifié depuis la dernière sauvegarde
+      </div>
+
     </div>
   `;
-
 }
     
   
