@@ -368,12 +368,27 @@ document
     "#predictionForm select"
   )
   .forEach(select => {
-    if (select.value!=appState.originalSubmission[select.name]){
-       select.classList.add("changedSelection");
-    } 
-    else {
-      select.classList.remove("changedSelection");
-    }
+    const originalValue =
+  appState.originalSubmission?.[
+    select.name
+  ];
+
+if (
+  originalValue !== undefined &&
+  select.value !== originalValue
+) {
+
+  select.classList.add(
+    "changedSelection"
+  );
+
+} else {
+
+  select.classList.remove(
+    "changedSelection"
+  );
+
+}
 
     select.classList.remove(
       "missingSelection"
