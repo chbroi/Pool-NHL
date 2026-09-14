@@ -119,7 +119,9 @@ export async function loadPredictionsDetails() {
 
         // ✅ RÉSULTAT (gagnant seulement, jamais de "vs")
         let resultTeam = appState.results[teamKey];
-        let resultDisplay = resultTeam ? resultTeam : "-";
+        let resultDisplay = resultTeam
+          ? `${getTeamLogo(resultTeam)} ${resultTeam}`
+          : "-";
         
         const resultGames = appState.results[gamesKey];
         
@@ -184,7 +186,9 @@ export async function loadPredictionsDetails() {
           const pickTeam = userData?.picks?.[teamKey];
           const pickGames = userData?.picks?.[gamesKey];
 
-          let cell = pickTeam ? `${pickTeam} (${pickGames})` : "-";
+          let cell = pickTeam
+            ? `${getTeamLogo(pickTeam)} ${pickTeam} (${pickGames})`
+            : "-";
 
           let points = 0;
           
