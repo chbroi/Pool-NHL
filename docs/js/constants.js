@@ -80,7 +80,10 @@ export const SCORING = {
 ];
 
 export function getTeamLogo(teamAbbrev) {
-    const theme =
+
+  if (!teamAbbrev) return "";
+
+  const theme =
     document.body.dataset.theme === "dark"
       ? "dark"
       : "light";
@@ -88,5 +91,8 @@ export function getTeamLogo(teamAbbrev) {
   return `
     <img
       class="teamLogo"
-      src="https://assets.nhle.com/logos/nhl/svg/${teamAbbrev}`
+      src="https://assets.nhle.com/logos/nhl/svg/${teamAbbrev}_${theme}.svg"
+      alt="${teamAbbrev}"
+    >
+  `;
 }
