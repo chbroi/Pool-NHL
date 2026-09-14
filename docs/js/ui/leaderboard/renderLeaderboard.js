@@ -1,7 +1,7 @@
 import { appState } from "../../app/state.js";
 import { getAllPredictions } from "../../services/firestoreService.js";
 import { computeLeaderboard } from "../../logic/scoring.js";
-import { getTeamLogo} from "./constants.js";
+import { getTeamLogo} from "../../constants.js";
 
 
 export async function renderFullLeaderboard() {
