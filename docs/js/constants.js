@@ -79,3 +79,17 @@ export const SCORING = {
   "profile"
 ];
 
+export function getTeamLogo(teamAbbrev) {
+
+  const theme =
+    document.body.dataset.theme;
+
+  const variant =
+    theme === "dark"
+      ? "dark"
+      : "light";
+
+  return `https://assets.nhle.com/logos/nhl/svg/${teamAbbrev}_${variant}.svg`;
+
+}
+
