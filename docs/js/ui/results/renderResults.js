@@ -81,7 +81,7 @@ export async function loadPredictionsDetails() {
   Object.keys(submissions).map(Number).sort((a,b)=>a-b).forEach(round => {
 
     let html = `<h3>Soumission ${round}</h3>`;
-    html += `<div style="overflow-x:auto;">`;
+    html += `<div class="tableWrapper">`;
     html += `<table class="resultsTable">`;
 
     // HEADER
