@@ -151,7 +151,7 @@ export async function loadPredictionsDetails() {
           const t2 = p2 ? appState.results[p2] : null;
         
           if (t1 && t2) {
-            displayName = `${t1} vs ${t2}`; // ✅ ICI SEULEMENT
+            displayName = `${getTeamLogo(t1)}${t1}vs${getTeamLogo(t2)}${t2}`;
           } else {
             // ✅ fallback selon ta logique
             if (matchKey.startsWith("R2")) {
