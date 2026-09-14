@@ -410,7 +410,7 @@ export function renderNhlStatsTable() {
     );
 
     container.innerHTML = `
-
+    <div class="tableWrapper">
       <table class="resultsTable">
 
         <thead>
@@ -444,6 +444,7 @@ export function renderNhlStatsTable() {
         </tbody>
 
       </table>
+      </div>
 
     `;
 
@@ -506,7 +507,7 @@ export function renderNhlStatsTable() {
   );
 
   container.innerHTML = `
-
+  <div class="tableWrapper">
     <table class="resultsTable">
 
       <thead>
@@ -540,6 +541,7 @@ export function renderNhlStatsTable() {
       </tbody>
 
     </table>
+    </div>
 
   `;
 }
