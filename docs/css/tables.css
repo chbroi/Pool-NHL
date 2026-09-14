@@ -27,9 +27,6 @@ body[data-theme="light"] .leaderboardTable td {
     text-align: center;
       border-collapse: collapse;
   display: block;
-
-  overflow-x: auto;
-
   white-space: nowrap;
     
     }
@@ -135,4 +132,17 @@ body[data-theme="light"] .leaderboardTable td {
   background: #fafafa;
 
 }
+.tableWrapper {
 
+  width: 100%;
+
+}
+@media (max-width: 768px) {
+
+  .tableWrapper {
+
+    overflow-x: auto;
+
+  }
+
+}
