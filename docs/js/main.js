@@ -4,6 +4,7 @@ import { loadPlayers} from "./services/firestoreService.js";
 import { signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { POOL_CONFIG} from "./constants.js";
 import { appState } from "./app/state.js"
+import { refreshHelperMessage } from "./app/state.js"
 import { toggleSubmissionOpen, updateSubmissionRound, clearAdminHistory, updateDeadline, deletePredictionAdmin, togglePayment, deleteFeedback} from "./admin/adminActions.js";
 import { showRulesModal,initializeRulesUi } from "./app/rulesModal.js";
 import { submitPredictions } from "./services/predictionService.js";
