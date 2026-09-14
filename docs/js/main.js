@@ -29,7 +29,9 @@ await loadPlayers();
 
 initializeAuth();
                   
+setInterval(() => {refreshHelperMessage();
 
+}, 1000);
 window.showRulesModal = showRulesModal;
 
 window.showTab = showTab;
