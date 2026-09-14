@@ -725,7 +725,11 @@ export function formatCountdown(deadline) {
     Math.floor(
       (diff / (1000 * 60)) % 60
     );
+  const secondes =
+    Math.floor(
+      (diff / (1000)) % 60
+    );
 
-  return `${days}j ${hours}h ${minutes}m`;
+  return `${days}j ${hours}h ${minutes}m ${secondes}s`;
 
 }
