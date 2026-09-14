@@ -11,7 +11,7 @@ export async function loadPredictionsDetails() {
   const round1Matchups = await getRound1Matchups();
   const round1Map = {};
   round1Matchups.forEach(m => {
-    round1Map[m.id] = `${m.team1} vs ${m.team2}`;
+    round1Map[m.id] = `${getTeamLogo(m.team)}${m.team1} vs ${getTeamLogo(m.team2)}${m.team2}`;
   });
   const container = document.getElementById("resultsTab");
   const predictions = await getAllPredictions();
@@ -151,7 +151,7 @@ export async function loadPredictionsDetails() {
           const t2 = p2 ? appState.results[p2] : null;
         
           if (t1 && t2) {
-            displayName = `${getTeamLogo(t1)}${t1}vs${getTeamLogo(t2)}${t2}`;
+            displayName = `${getTeamLogo(t1)}${t1} vs ${getTeamLogo(t2)}${t2}`;
           } else {
             // ✅ fallback selon ta logique
             if (matchKey.startsWith("R2")) {
@@ -387,7 +387,7 @@ export async function generateRound(roundNumber) {
 
     html += `
       <div class="matchup">
-        <label>  ${getTeamLogo(team1)}${team1}  vs ${getTeamLogo(team2)}${team2} </label>
+        <label>  ${getTeamLogo(team1)}${team1}  vs  ${getTeamLogo(team2)}${team2} </label>
         <select name="${match.id}_team" id="${match.id}_team">
           <option value="">Choisir</option>
           <option value="${team1}">${team1}</option>
