@@ -26,8 +26,6 @@ body[data-theme="light"] .leaderboardTable td {
       width: 100%;
     text-align: center;
       border-collapse: collapse;
-  display: block;
-  white-space: nowrap;
     
     }
 
