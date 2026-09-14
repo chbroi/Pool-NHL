@@ -81,6 +81,9 @@ export async function loadExistingSubmission() {
   structuredClone(
     prediction.picks
   );
+  console.log(
+  appState.originalSubmission
+);
   const picks =
     prediction.picks;
 
@@ -93,6 +96,12 @@ console.log(
   "Valeurs disponibles:",
   [...document.getElementById("Conn_Smythe").options]
     .map(o => o.value)
+);
+  console.log(
+  "R4",
+  appState.originalSubmission[
+    "R4_final_team"
+  ]
 );
 
   // RONDE 1
