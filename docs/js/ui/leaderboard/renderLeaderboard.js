@@ -24,6 +24,7 @@ export async function renderFullLeaderboard() {
   container.innerHTML = `
   <div class="card">
     <h2>🏆 Classement complet</h2>
+    <div class="tableWrapper">
     <table class="resultsTable leaderboardTable">
       <tr>
         <th>Position</th>
@@ -47,6 +48,7 @@ export async function renderFullLeaderboard() {
         </tr>
       `).join("")}
     </table>
+    </div>
   </div>
 `;
 }
