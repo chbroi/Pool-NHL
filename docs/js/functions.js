@@ -535,7 +535,11 @@ export function refreshHelperMessage() {
         <strong>
             ${formatDeadline(deadline)}
         </strong>
-    `;
+        • Temps restant :
+          <strong>
+            ${formatCountdown(deadline)}
+          </strong>
+              `;
 
 }
 
@@ -695,5 +699,33 @@ export function getRequiredFields(currentSubmission) {
   );
 
   return requiredFields;
+
+}
+
+export function formatCountdown(deadline) {
+
+  const diff =
+    deadline - Date.now();
+
+  if (diff <= 0) {
+    return "🔒 Expiré";
+  }
+
+  const days =
+    Math.floor(
+      diff / (1000 * 60 * 60 * 24)
+    );
+
+  const hours =
+    Math.floor(
+      (diff / (1000 * 60 * 60)) % 24
+    );
+
+  const minutes =
+    Math.floor(
+      (diff / (1000 * 60)) % 60
+    );
+
+  return `${days}j ${hours}h ${minutes}m`;
 
 }
