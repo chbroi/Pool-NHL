@@ -103,3 +103,16 @@
     );
 
 }
+
+.legendCard {
+
+  display: flex;
+
+  gap: 20px;
+
+  justify-content: center;
+
+  font-size: .9rem;
+
+}
+
