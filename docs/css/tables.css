@@ -1,4 +1,6 @@
- /* ===== TABLE ===== */
+ /* ==================================================
+   TABLEAUX DE RÉSULTATS ET CLASSEMENTS
+   ================================================== */
     .resultsTable tr:hover {
       background: rgba(0,0,0,0.05);
     }
@@ -61,6 +63,14 @@ body[data-theme="light"] .leaderboardTable td {
       font-weight: 700;
     
     }
+
+    /* ==================================================
+   COLONNE DU PARTICIPANT CONNECTÉ
+
+   Toujours visible grâce à sticky.
+   Permet de comparer rapidement ses choix.
+
+   ================================================== */
         
     .myColumnHeader {
       background: #ffd700;
@@ -104,6 +114,9 @@ body[data-theme="light"] .leaderboardTable td {
       color: white;
     
     }
+    /* ==================================================
+   LIGNES SPÉCIALES DE POINTAGE
+   ================================================== */
     .connSmytheRow {
       background: rgba(0, 123, 255, 0.15);
      text-align: center;

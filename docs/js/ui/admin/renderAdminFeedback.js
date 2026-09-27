@@ -1,6 +1,20 @@
-import { appState } from "../../app/state.js";
-import { getAllFeedback } from "../../services/firestoreService.js";
+/* =========*==================================*=====
+   ADMIN FEEDBACK
 
+   Gestion de l'affichage des commentaires
+   transmis par les participants.
+
+   Responsabilités :
+   - Construction de la section feedback
+   - Rafraîchissement en temps réel
+   - Génération des liens de réponse
+
+   ==*==================================*============ */
+import { appState } from "../../app/state.js";
+
+/**   Génère la carte affichant
+   les commentaires reçus.
+*/
 export function renderAdminFeedbackCard() {
 
   return `
@@ -19,7 +33,15 @@ export function renderAdminFeedbackCard() {
 
   `;
 }
+/*
+   Recharge la liste complète
+   des commentaires.
 
+   Le dernier snapshot reçu est conservé
+   dans appState afin de permettre
+   une reconstruction rapide lors
+   du rechargement de l'interface admin.
+*/
 export function reloadFeedbackSection(snapshot) {
 
   appState.feedbackSnapshot = snapshot;   
@@ -28,10 +50,7 @@ const feedbackContainer =
   document.getElementById(
     "feedbackContainer"
   );
-  console.log(
-  "feedbackContainer",
-  feedbackContainer
-);
+ 
 if (!feedbackContainer) return;
 feedbackContainer.innerHTML = "";
 snapshot.forEach(doc => {
@@ -40,7 +59,6 @@ snapshot.forEach(doc => {
     id: doc.id,
     ...doc.data()
   };
-  console.log("feedback", f);
 
 const body = encodeURIComponent(
 `Bonjour ${f.userName},

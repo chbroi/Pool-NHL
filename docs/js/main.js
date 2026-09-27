@@ -1,10 +1,17 @@
-//MAIN Script pour le pool
-import { auth, GoogleAuthProvider } from "./firebase.js";
-import { loadPlayers} from "./services/firestoreService.js";
-import { signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { POOL_CONFIG} from "./constants.js";
-import { appState } from "./app/state.js"
-import { refreshHelperMessage } from "./functions.js"
+/* ============================*=====================
+   MAIN
+
+   Point d'entrée principal de l'application.
+
+   Responsabilités :
+   - Initialisation globale
+   - Authentification
+   - Thème
+   - Règles de participation
+   - Exposition des fonctions globales
+
+   ============*==================================*== */
+import { refreshHelperMessage } from "./utils/helpers.js"
 import { toggleSubmissionOpen, updateSubmissionRound, clearAdminHistory, updateDeadline, deletePredictionAdmin, togglePayment, deleteFeedback} from "./admin/adminActions.js";
 import { showRulesModal,initializeRulesUi } from "./app/rulesModal.js";
 import { submitPredictions } from "./services/predictionService.js";
@@ -13,12 +20,18 @@ import { initializeAuth} from "./auth/authHandlers.js";
 import { initializeAuthButtons} from "./auth/authButtons.js";
 import { submitFeedback } from "./profile/feedback.js";
 import { updateConnSmythePlayers } from "./services/nhlService.js";
-
+import { generateRandomNoob,updateConnSmytheWinner} from "./admin/adminActions.js";
 import { showTab } from "./app/tabs.js";
 
-
+/* 
+ Configuration des boutons d'authentification.
+*/
 initializeAuthButtons();
 
+/*
+   Initialisation des composants
+   dépendant du DOM.
+*/
 document.addEventListener("DOMContentLoaded", () => {
   
   initializeRulesUi();
@@ -26,13 +39,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-await loadPlayers();
 
+
+/*
+   Démarrage du cycle de vie
+   d'authentifi*ation Firebase.
+*/
 initializeAuth();
-                  
+                 
+/*
+   Mise à jour continue du compte à rebours des dates limites.
+*/
 setInterval(() => {refreshHelperMessage();
 
 }, 1000);
+
+/* =================================*================
+   API GLOBALE UI*
+   Fonctions exposées à partir du HTML
+   via les attributs onclick.
+   ================================================== */
 window.showRulesModal = showRulesModal;
 
 window.showTab = showTab;
@@ -56,3 +82,5 @@ window.togglePayment = togglePayment;
 window.deleteFeedback = deleteFeedback;
 
 window.updateConnSmythePlayers = updateConnSmythePlayers;
+window.generateRandomNoob = generateRandomNoob;
+window.updateConnSmytheWinner =  updateConnSmytheWinner;

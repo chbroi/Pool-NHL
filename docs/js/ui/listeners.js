@@ -1,10 +1,28 @@
+/* ==================================================
+   UI LISTENERS
+
+   Gestion des événements associés
+   au formulaire de prédictions.
+
+   Responsabilités :
+   - Propagation des gagnants
+   - Génération dynamique des rondes
+   - Mise à jour du Conn Smythe
+   - Validation du formulaire
+
+   ================================================== */
 import { round1Ids} from "../constants.js";
 import { appState } from "../app/state.js";
-
+import { checkIfReadyToSubmit } from "../services/predictionService.js"; // ou renderRounds.js
+import { updateConnSmytheField } from "../services/nhlService.js"; // ou renderRounds.js
 import { generateRound } from "./render.js"; // ou renderRounds.js
-import * as funcs from "../functions.js";
 
+/*
+   Attache les événements de la première ronde.
 
+   Chaque modification d'un gagnant
+   déclenche la reconstruction de la ronde 2.
+*/
 export function attachRound1Listeners() {
 
   round1Ids.forEach(id => {
@@ -13,12 +31,11 @@ export function attachRound1Listeners() {
     if (!el) return;
 
     el.addEventListener('change', async () => {
-      console.log("R1 changed", id)
       await generateRound(2);
 
       attachRound2Listeners();
 
-      funcs.checkIfReadyToSubmit(
+      checkIfReadyToSubmit(
         appState.submission
       );
     });
@@ -27,6 +44,12 @@ export function attachRound1Listeners() {
 
 }
 
+/*
+   Attache les événements de la deuxième ronde.
+
+   Chaque modification d'un gagnant
+   déclenche la reconstruction de la ronde 3.
+*/
 export function attachRound2Listeners() {
 
   [
@@ -46,7 +69,7 @@ export function attachRound2Listeners() {
 
       attachRound3Listeners();
 
-      funcs.checkIfReadyToSubmit(
+      checkIfReadyToSubmit(
         appState.submission
       );
 
@@ -55,6 +78,13 @@ export function attachRound2Listeners() {
   });
 
 }
+/*
+   Attache les événements de la troisième ronde.
+
+   Chaque modification met à jour :
+   - la finale
+   - les choix Conn Smythe
+*/
 export function attachRound3Listeners() {
 
   [
@@ -70,15 +100,19 @@ export function attachRound3Listeners() {
 
       await generateRound(4);
       attachConnSmytheListeners();
-      funcs.updateConnSmytheField(appState.players, appState.submission);
-      funcs.checkIfReadyToSubmit(appState.submission);
+      updateConnSmytheField(appState.players, appState.submission);
+      checkIfReadyToSubmit(appState.submission);
     });
 
   });
 
 }
 
-
+/*
+   Synchronise automatiquement la liste
+   des candidats Conn Smythe avec les
+   finalistes sélectionnés.
+*/
 export function attachConnSmytheListeners() {
 
   const est = document.getElementById('R3_EST_1_team');
@@ -87,12 +121,12 @@ export function attachConnSmytheListeners() {
   if (est) {
     est.addEventListener('change', () => {
 
-      funcs.updateConnSmytheField(
+      updateConnSmytheField(
         appState.players,
         appState.submission
       );
 
-      funcs.checkIfReadyToSubmit(
+      checkIfReadyToSubmit(
         appState.submission
       );
 
@@ -102,12 +136,12 @@ export function attachConnSmytheListeners() {
   if (west) {
     west.addEventListener('change', () => {
 
-      funcs.updateConnSmytheField(
+      updateConnSmytheField(
         appState.players,
         appState.submission
       );
 
-      funcs.checkIfReadyToSubmit(
+      checkIfReadyToSubmit(
         appState.submission
       );
 
@@ -120,7 +154,7 @@ export function attachConnSmytheListeners() {
 
     conn.addEventListener('change', () => {
 
-      funcs.checkIfReadyToSubmit(
+      checkIfReadyToSubmit(
         appState.submission
       );
 

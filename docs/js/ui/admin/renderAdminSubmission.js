@@ -1,9 +1,34 @@
+/* ==========*==================================*====
+   ADMIN SUBMISSIONS
+
+   Gestion administrative des soumissions.
+   Responsabilités :
+   - État du pool
+   - Dates limites
+   - Ouverture des soumissions
+   - Suppression de prédictions
+   - Gestion du Conn Smythe
+   - Génération du Random Noob
+
+   ========================*========================= */
 import { appState } from "../../app/state.js";
 import { getAllPredictions } from "../../services/firestoreService.js";
-import * as funcs from "../../functions.js";
+import { isSubmissionOpen,formatDeadline } from "../../utils/helpers.js";
 
+/*
+   Génère l'ensemble des outils de gestion
+   des soumissions.
+
+   Comprend :
+   - état actuel du pool
+   - dates limites
+   - contrôle des rondes actives
+   - suppression de prédictions
+   - Random Noob
+   - Conn Smythe
+*/
 export function renderAdminSubmissionCard() {
-  const isOpen = funcs.isSubmissionOpen();
+  const isOpen = isSubmissionOpen();
   const deadline = appState[ `round${appState.submission}Deadline`];
   const deadlinePassed = deadline && Date.now() > deadline;
   
@@ -26,8 +51,8 @@ export function renderAdminSubmissionCard() {
       
         ${
           deadlinePassed
-            ? `⚠️ ${funcs.formatDeadline(deadline)} (dépassée)`
-            : funcs.formatDeadline(deadline)
+            ? `⚠️ ${formatDeadline(deadline)} (dépassée)`
+            : formatDeadline(deadline)
         }
       
       </p>
@@ -149,11 +174,66 @@ export function renderAdminSubmissionCard() {
             Supprimer
         
           </button>
-        
+          <div class="card">
+
+            <h3>🎲 Random Noob</h3>
+
+            <p>
+              Génère automatiquement des
+              prédictions aléatoires.
+            </p>
+
+            <button
+              class="actionBtn"
+              onclick="generateRandomNoob()">
+
+              Générer Random Noob
+
+            </button>
+
+          </div>
+        <div class="card">
+
+          <h3>
+            🏆 Conn Smythe
+          </h3>
+
+          <label>
+            Gagnant officiel
+          </label>
+
+          <input
+            id="connSmytheInput"
+            list="connSmytheList"
+            placeholder="Commencer à taper..." />
+
+          <datalist id="connSmytheList">
+          </datalist>
+
+          <br><br>
+
+          <button
+            class="actionBtn"
+            onclick="updateConnSmytheWinner()">
+
+            Sauvegarder
+
+          </button>
+
+        </div>  
+
         </div>
   `;
 }
 
+/*
+   Charge les prédictions existantes
+   dans la liste de suppression.
+
+   Permet à l'administrateur de
+   sélectionner une soumission
+   à retirer.
+*/
 export async function loadAdminSubmission() {
 
   const ddl =
@@ -180,6 +260,11 @@ export async function loadAdminSubmission() {
 
 }
 
+/*
+   Initialise les champs de dates
+   avec les valeurs actuellement
+   configurées dans le système.
+*/
 export function loadDeadlineFields() {
 
   if (appState.round1Deadline) {
@@ -204,6 +289,12 @@ export function loadDeadlineFields() {
 
 }
 
+/*
+   Convertit un timestamp JavaScript
+   vers le format attendu par
+   un champ input datetime-local.
+*/
+
 export function formatDateTimeLocal(timestamp) {
 
   const d = new Date(timestamp);
@@ -219,5 +310,35 @@ export function formatDateTimeLocal(timestamp) {
   }:${
     pad(d.getMinutes())
   }`;
+
+}
+/*
+   Alimente la liste de recherche
+   utilisée pour sélectionner
+   le gagnant du Conn Smythe.
+
+   Tous les joueurs disponibles
+   dans appState sont proposés.
+*/
+export function loadConnSmytheDatalist() {
+
+  const list =
+    document.getElementById(
+      "connSmytheList"
+    );
+
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  (appState.players || [])
+    .forEach(player => {
+
+      list.innerHTML += `
+        <option
+          value="${player.name}">
+      `;
+
+    });
 
 }

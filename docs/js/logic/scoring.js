@@ -1,7 +1,26 @@
 
+/* ====================*=============================
+   S*ORING ENGINE
+
+   Moteur de calcul du pointage du pool.
+
+   Responsabilités :
+   - Calcul des points d'une soumission
+   - Calcul du total d'un participant
+   - Construction du classement global
+   - Application des règles de pointage
+     définies dans SCORING
+
+   ==============*==================================* */
 import { SCORING } from "../constants.js";
 
-// helper
+/*
+   Détermine à quelle ronde appartient
+   une clé de résultat ou de prédiction.
+
+   Exemple :
+*  R2_EST_1_team → ronde 2
+*/
 export function getRoundFromKey(key) {
   if (key.startsWith("R1")) return 1;
   if (key.startsWith("R2")) return 2;
@@ -10,8 +29,19 @@ export function getRoundFromKey(key) {
   return 0;
 }
 
-// score d'une soumission
 
+/*
+   Calcule le score obtenu pour une
+   soumission donnée.
+
+   Les points sont attribués selon :
+   - l'équipe correctement sélectionnée
+   - le nombre exact de matchs
+   - le trophée Conn Smythe
+
+   Les règles appliquées dépendent de la
+   soumission utilisée lors de la prédiction.
+*/
 export function calculateSubmissionScore(picks, results, submission) {
 
   let score = 0;
@@ -64,7 +94,13 @@ export function calculateSubmissionScore(picks, results, submission) {
 }
 
 
-// total utilisateur
+/*
+   Calcule le total cumulé d'un participant.
+
+   Les prédictions sont évaluées individuellement
+   puis additionnées afin d'obtenir le pointage
+   global du participant.
+*/
 export function calculateTotalScore(predictions, results) {
 
   let total = 0;
@@ -91,8 +127,23 @@ export function calculateTotalScore(predictions, results) {
   return total;
 }
 
+/*
+   Génère le classement global du pool.
 
-// leaderboard
+   Chaque soumission est évaluée puis les
+   points sont regroupés par participant.
+
+   Retour :
+   [
+     {
+       id,
+       name,
+       score
+     }
+   ]
+
+   Les participants sont retournés en ordre décroissant de pointage.
+*/
 export async function computeLeaderboard(predictions, results) {
 
   const scores = {};

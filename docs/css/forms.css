@@ -1,3 +1,7 @@
+ /*==================================================
+   CHAMPS DE SAISIS
+   Menus déroulants des prédictions.
+   ================================================== */
  select {
     
       padding: 10px 14px;
@@ -56,6 +60,14 @@
     
     }
 
+  
+    /* ==================================================
+   VALIDATION VISUELLE
+
+   Orange : choix obligatoire manquant
+   Vert    : valeur modifiée depuis la dernière sauvegarde
+
+   ================================================== */
 
 .missingSelection {
 

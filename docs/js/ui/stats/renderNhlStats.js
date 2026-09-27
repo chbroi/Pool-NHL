@@ -1,7 +1,22 @@
+/* =====*==================================*=========
+   NHL STATS RENDERER
+
+   Affichage des statistiques NHL.
+
+   Responsabilités :
+   - Classements de joueurs
+   - Classements de gardiens
+   - Statistiques saison régulière
+   - Statistiques des séries
+
+   ================================================== */
 import { appState } from "../../app/state.js";
 import { getTeamLogo } from "../../constants.js";
 
-
+/*
+   Trie les joueurs selon la statistique
+   et le type de saison sélectionnés.
+*/
 export function getPlayerStats( players, metric, seasonType) {
 
   let result =
@@ -78,7 +93,11 @@ export function getPlayerStats( players, metric, seasonType) {
   return result;
 }
 
-export function renderNhlStats() {
+/*
+   Initialise la page des statistiques NHL
+   ainsi que ses contrôles interactifs.
+*/
+export async function renderNhlStats() {
 
   const tab =
     document.getElementById(
@@ -156,6 +175,10 @@ export function renderNhlStats() {
   renderNhlStatsTable();
 
 }
+/*
+   Attache les élénements permettant
+   de filtrer et trier les statistiques.
+*/
 
 export function attachNhlStatsListeners() {
 
@@ -201,6 +224,10 @@ export function attachNhlStatsListeners() {
 
 }
 
+/*
+   Génère le tableau de statistiques
+   correspondant aux filtres actifs.
+*/
 export function renderNhlStatsTable() {
 
   const seasonType =

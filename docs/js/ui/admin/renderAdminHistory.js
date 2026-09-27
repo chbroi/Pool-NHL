@@ -1,4 +1,20 @@
+/* ==================================================
+   ADMIN HISTORY
+
+   Affichage du journal administratif.
+
+   Responsabilités :
+   - Visualisation des actions admin
+   - Tri chronologique
+   - Consultation de l'historique
+
+   ================================================== */
 import { getAdminLogs } from "../../services/firestoreService.js";
+
+/*
+   Génère la carte affichant
+   l'historique a*ministratif.
+*/
 export function renderAdminHistoryCard() {
 
   return `
@@ -25,6 +41,13 @@ export function renderAdminHistoryCard() {
   `;
 }
 
+/*
+   Charge et affiche les ent*ées
+   du journal administratif.
+
+   Les événements sont présentés
+   du plus récent au plus ancien.
+*/
 export async function loadAdminHistory() {
 
   const logs =

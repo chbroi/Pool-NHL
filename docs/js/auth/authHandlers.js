@@ -1,18 +1,39 @@
-import * as funcs from "../functions.js";
+/* ==========*==================================*====
+   AUTH HANDLERS
+
+   Gestion du cycle de vie de l'authentification.
+
+   Responsabilités :
+   - Détection des connexions Firebase
+   - *hargement de la configuration globale
+   - Initialisation des données utilisateur
+   - Initialisation des listeners temps réel
+   - Configuration de l'interface selon le rôle
+   ==============================*=================== */
 import { auth, db } from "../firebase.js";
 import { appState } from "../app/state.js";
 import { showTab } from "../app/tabs.js";
+import { checkIfReadyToSubmit } from "../services/predictionService.js";
+import { refreshHelperMessage } from "../utils/helpers.js";
 import { loadAppConfig, hasAcceptedRules } from "../services/userService.js";
-import { hasSubmitted } from "../services/firestoreService.js";
-import { setupRealtimeListeners }from "../services/realtimeService.js";
+import { hasSubmitted,loadPlayers } from "../services/firestoreService.js";
+import { setupRealtimeListeners,setupAdminRealtimeListeners }from "../services/realtimeService.js";
 import { attachRound1Listeners, attachRound2Listeners, attachRound3Listeners, attachConnSmytheListeners} from "../ui/listeners.js";
 import { generateRound }from "../ui/render.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { initializeRulesUi } from "../app/rulesModal.js";
+import { showError} from "../ui/dialogs.js";
+import { loadPublicPages} from "../ui/refresh.js";
 
+/*
+   Point d'entrée principal du système
+   d'authentification.
 
-
+   Charge la configuration du pool puis
+   délègue l'initialisation selon que
+   l'utilisateur est connecté ou non.
+*/
 export function initializeAuth() {
 
   onAuthStateChanged(
@@ -24,6 +45,32 @@ export function initializeAuth() {
         config,
         results
       } = await loadAppConfig();
+
+      appState.currentSeason =
+        config.currentSeason;
+
+      appState.results =
+        results;
+
+      appState.submission =
+        Number(config.currentSubmission);
+
+      appState.submissionOpen =
+        config.submissionOpen;
+
+      appState.round1Deadline =
+        config.round1Deadline;
+
+      appState.round2Deadline =
+        config.round2Deadline;
+
+      appState.round3Deadline =
+        config.round3Deadline;
+
+      appState.round4Deadline =
+        config.round4Deadline;
+      await loadPlayers();
+      setupRealtimeListeners();
 
       if (user) {
 
@@ -37,12 +84,7 @@ export function initializeAuth() {
 
         } catch (err) {
 
-          console.error(err);
-
-          alert(
-            "Erreur d'initialisation : " +
-            err.message
-          );
+          await showError("Erreur d'initialisation",err.message);
 
         }
 
@@ -58,7 +100,14 @@ export function initializeAuth() {
 
 }
 
-function handleLoggedOutUser() {
+/*
+   Réinitialise l'interface lorsqu'aucun
+   utilisateur n'est connecté.
+
+   Masque les fonctionnalités privées
+   et affiche l'interface visiteur.
+*/
+async function handleLoggedOutUser() {
 const loginBtn = document.getElementById("loginBtn");
 const logoutBtn = document.getElementById("logoutBtn");
 const userInfo = document.getElementById("userInfo");
@@ -117,6 +166,7 @@ const userInfo = document.getElementById("userInfo");
     // Retour automatique à la page actuelle
   
     const lastTab =localStorage.getItem( "activeTab") || "home";
+    await loadPublicPages();
     showTab(lastTab);
   
     // Page d'accueil visiteur
@@ -156,6 +206,18 @@ const userInfo = document.getElementById("userInfo");
     }
   }
 
+  /*
+   Initialise complètement la session
+   d'un utilisateur authentifié.
+
+   Effectue notamment :
+   - chargement des permissions
+   - détection du rôle administrateur
+   - configuration de l'interface
+   - génération du formulaire
+   - attachement des listeners
+   - restauration du dernier onglet visité
+*/
 async function handleLoggedInUser( user, config, results) {
       const loginBtn = document.getElementById("loginBtn");
       const logoutBtn = document.getElementById("logoutBtn");
@@ -164,7 +226,21 @@ async function handleLoggedInUser( user, config, results) {
       appState.acceptedRules = await hasAcceptedRules(user.uid);
       const participantDoc = await getDoc(doc(db, "participants", user.uid));
       appState.isAdmin = participantDoc.exists() && participantDoc.data().isAdmin === true;
-      setupRealtimeListeners();
+      console.log(
+        "IS ADMIN",
+        appState.isAdmin
+      );
+      if (appState.isAdmin) {
+
+        console.log(
+          "STARTING ADMIN LISTENERS"
+        );
+
+        setupAdminRealtimeListeners();
+
+      }
+      appState.currentSeason =config.currentSeason;
+      
  
       appState.submission = Number(config.currentSubmission);
       appState.results = results;
@@ -177,7 +253,7 @@ async function handleLoggedInUser( user, config, results) {
       appState.round4Deadline = config.round4Deadline;
       initializeRulesUi();
       appState.paid = participantDoc.data()?.paid ?? false;
-      funcs.refreshHelperMessage();
+      refreshHelperMessage();
     
       // ======================
       // UI connecté
@@ -266,7 +342,7 @@ async function handleLoggedInUser( user, config, results) {
           "change",
           () => {
   
-            funcs.checkIfReadyToSubmit(
+            checkIfReadyToSubmit(
               appState.submission
             );
   
@@ -284,4 +360,3 @@ async function handleLoggedInUser( user, config, results) {
       showTab(lastTab);
   
 }
-

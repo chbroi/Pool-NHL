@@ -1,9 +1,23 @@
+/* ==================================================
+   LEADERBOARD RENDERER
+
+   Affichage du classement général.
+
+   Responsabilités :
+   - Calcul du classement courant
+   - Affichage des positions
+   - Mise en évidence du podium
+
+   ================================================== */
 import { appState } from "../../app/state.js";
 import { getAllPredictions } from "../../services/firestoreService.js";
 import { computeLeaderboard } from "../../logic/scoring.js";
-import { getTeamLogo} from "../../constants.js";
 
-
+/*
+   Génere le classement complet du pool.
+*   Les participants sont triés selon leur
+   pointage total obtenu jusqu'à présent.
+*/
 export async function renderFullLeaderboard() {
   const container = document.getElementById("leaderboardTab");
 

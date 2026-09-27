@@ -1,4 +1,9 @@
- /* ===== CARDS ===== */
+ /* ==================================================
+CARTES GÉNÉRIQUES
+Utilisées dans l'ensemble du site :
+accueil, profil, admin, résultats, règlements.
+================================================== */
+
     .section, .card {
       background: var(--card);
       padding: 16px;
@@ -14,6 +19,11 @@
       border-radius: 8px;
     }
 
+/* ==================================================
+   CARTES DE RÈGLEMENTS
+   Mise en évidence d'un article officiel du règlement.
+   ================================================== */
+    
 .ruleArticle {
 
   background: var(--card);
@@ -71,6 +81,13 @@
   margin-bottom: 8px;
 
 }
+
+/* ==================================================*
+   ACCUEIL
+   Sections interactives permettant
+   d'accéder rapidement aux différents onglets.
+   ================================================== */
+
  .homeActions {
       display: flex;
       flex-direction: column;
@@ -102,6 +119,12 @@
       color: var(--text);
       font-size: 14px;
     }
+
+    /* ==================================================
+    BOUTONS STANDARDS
+    Classe principale utilisée partout dans l'application.
+   ================================================== */
+
     .actionBtn {
       background: var(--primary);
       color: white;

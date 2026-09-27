@@ -1,8 +1,24 @@
+/* ==================================================
+   FIREBASE
 
+   Initialisation des services Firebase.
+
+   Services utilisés :
+   - Authentication
+   - Firestore
+
+   Ce module centralise la création
+   des instances Firebase utilisées
+   dans toute l'application.
+
+   ================================================== */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+/*
+   Configuration du projet Firebase.
+*/
 const firebaseConfig = {
   apiKey: "AIzaSyD39ihyJvTmy3kERj_Ct4SPZkYFIpUgMjM",
   authDomain: "pool-hockey-5d1d0.firebaseapp.com",

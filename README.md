@@ -1,69 +1,184 @@
 
 # Pool de séries NHL (Web App)
 
-Application web permettant de gérer un pool de séries éliminatoires avec :
+Application web de gestion d'un pool des séries éliminatoires de la LNH.
 
-- Prédictions par rondes
-- Validation dynamique
-- Calcul automatique des scores
-- Classement (leaderboard)
-- Affichage détaillé des résultats
+Les participants effectuent des prédictions à différentes étapes des séries et accumulent des points selon l'exactitude de leurs choix.
 
 ---
 
-## Features principales
+## Fonctionnalités
+### Participation
+✅ Connexion Google (Firebase Authentication)
+✅ Gestion des participants
+✅ Acceptation des règlements
+✅ Validation de l'éligibilité aux soumissions
+✅ Suivi des paiements
 
-✅ Connexion Google (Firebase Auth)  
-✅ Soumissions par ronde  
-✅ Génération dynamique des matchs  
-✅ Calcul de points multi-rondes  
-✅ Affichage des résultats avec validation (✅ / ❌)  
-✅ Classement complet  
-✅ Conn Smythe inclus  
+### Prédictions
+✅ Soumissions multi-rondes
+- Première ronde
+- Deuxième ronde
+- Finales de conférence
+- Finale de la Coupe Stanley
+✅ Génération dynamique des affrontements futurs
+✅ Modification des soumissions avant la date limite
+✅ Prédiction du gagnant du Conn Smythe
+
+### Classement et résultats
+✅ Calcul automatique des points
+
+✅ Classement en temps réel
+
+✅ Détail complet des prédictions
+
+✅ Validation visuelle :
+
+✅ équipe correcte
+✅✅ équipe et nombre de matchs corrects
+❌ prédiction incorrecte
+
+✅ Historique des soumissions
+
+### Statistiques
+✅ Statistiques du pool
+
+- Favoris du pool
+- Consensus
+- Choix uniques
+- Pronostic collectif
+
+✅ Statistiques NHL
+
+- Points
+- Buts
+- Passes
+- Gardiens
+- Saison régulière
+- Séries éliminatoires
+
+
+### Administration
+
+✅ Gestion des paiements
+
+✅ Gestion des commentaires
+
+✅ Journal administratif
+
+✅ Gestion des dates limites
+
+✅ Activation / désactivation des soumissions
+
+✅ Changement de la ronde active
+
+✅ Suppression de soumissions
+
+✅ Gestion du gagnant Conn Smythe
+
+✅ Génération automatique du participant fictif « Random Noob »
+
+### Temps réel
+✅ Synchronisation Firestore temps réel
+
+✅ Mise à jour automatique :
+
+- Classement
+- Résultats
+- Participants
+- Configuration
+- Commentaires administrateurs
+
+### Architecture
+src/
+├── admin/
+├── app/
+├── auth/
+├── logic/
+├── services/
+├── ui/
+│   ├── admin/
+│   ├── home/
+│   ├── leaderboard/
+│   ├── profile/
+│   ├── results/
+│   └── stats/
+├── utils/
+├── firebase.js
+├── constants.js
+└── main.js
+---
+## Infrastructure
+
+### Frontend
+- HTML5
+- CSS3
+- JavaScript ES6 Modules
+
+### Backend
+- Firebase Authentication
+- Cloud Firestore
+
+### Données NHL
+
+Les statistiques et résultats sont synchronisés à partir de l'API publique de la NHL.
+
+Scripts d'administration disponibles :
+
+admin-tools/
+
+├── update_players.py
+├── update_round1.py
+├── update_playoff_results.py
+├── update_playoff_structure.py
+├── run_all_updates.py
+└── settings.py
 
 ---
 
-## Logique
+## Système de pointage
+Le système récompense davantage les prédictions effectuées tôt dans les séries.
 
-- Chaque utilisateur soumet une prédiction par ronde
-- Les choix futurs dépendent des prédictions précédentes
-- Le scoring est basé sur :
-  - équipe correcte
-  - nombre de matchs correct
-  - multiplicateur par ronde
+Exemple :
 
----
+Soumission 1
 
-## Structure
+Champion Coupe Stanley
+✓ 8 points
 
-- /main.js        → logique principale / UI
-- /functions.js   → logique métier
-- /constants.js   → constantes (teams, scoring, etc.)
-- /firebase.js    → configuration Firebase
----
+Soumission 2
 
+Champion Coupe Stanley
+✓ 4 points
 
-## Technologies
+Soumission 3
 
-- JavaScript (Vanilla)
-- Firebase Auth
-- Firestore
-- HTML/CSS
+Champion Coupe Stanley
+✓ 2 points
 
+Soumission 4
+
+Champion Coupe Stanley
+✓ 1 point
 ---
 
 ## Installation
+1- Cloner le projet: git clone <repository>
+2- Configurer Firebase: créer le fichier firebase.js
+3- Installer un serveur local : npx serve ou python -m http.server 8000
+---
 
-1. Cloner le repo
-2. Configurer Firebase (`firebase.js`)
-3. Lancer avec un serveur local :
+## Deploiement
+Solutions recommandées :
 
-## Déploiement
+✅ GitHub Pages
+✅ Firebase Hosting
+✅ Netlify
+✅ Vercel
+---
 
-Options recommandées :
-- Firebase Hosting ✅
-- Netlify ✅
-- Vercel ✅
+
+
 
 ---
 

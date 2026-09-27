@@ -1,20 +1,36 @@
+/* ==================================================
+   RULES MODAL
+
+   Gestion de l'acceptation des règlements du pool.
+
+   Responsabilités :
+   - Affichage du modal de participation
+   - Acceptation officielle des règlements
+   - Navigation entre le modal et l'onglet règlements
+   - Initialisation des informations dynamiques
+   - Génération du contenu des règlements
+
+   ================================================== */
 import { appState } from "./state.js";
 import { acceptRules } from "../services/userService.js";
 import { showTab } from "./tabs.js";
 import { POOL_CONFIG } from "../constants.js";
-import { formatDeadline} from "../functions.js";
+import { formatDeadline} from "../utils/helpers.js";
 
+/*
+   Affiche le modal de participation.
+
+   Permet au participant :
+   - de consulter les règlements
+   - d'accepter les conditions
+   - de confirmer sa participation au pool
+*/
 export function showRulesModal() {
 
   const modal =
   document.getElementById("rulesModal");
 
 if (!modal) {
-
-  console.error(
-    "rulesModal introuvable"
-  );
-
   return;
 }
 
@@ -81,6 +97,14 @@ modal.style.display = "flex";
   };
 };
 
+/*
+   Initialise l'affic*age des règlements.
+
+   Met à jour les informations dynamiques :
+   - coût d'inscription
+   - dates limites des soumissions
+   - navigation entre le modal et les règlements
+*/
 export function initializeRulesUi() {
 
   const rulesTab = document.getElementById("rulesTab");
@@ -161,7 +185,12 @@ export function initializeRulesUi() {
     );
 }
 
+/*
+   Génère le contenu HTML complet des règlements.
 
+   Les valeurs dynamiques sont injectées
+   ultérieurement lors de l'initialisation
+*/
 export function getRulesHtml() {
 
   return `

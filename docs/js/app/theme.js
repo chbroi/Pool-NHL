@@ -1,8 +1,26 @@
 // app/theme.js
 
-// app/theme.js
+/* ==================================================
+   THEME MANAGEMENT
 
-export function initializeTheme() {
+   Gestion du thème clair et sombre.
+
+   Responsabilités :
+   - chargement du thème sauvegardé
+   - changement manuel de thème
+   - persistance dans localStorage
+
+  ================================================== */
+
+  /*
+   Initialise le thème visuel de l'applicat*on.
+
+   Charge le thème sauvegardé puis
+   configure le bouton de basculement
+   clair / sombre.
+*/
+
+  export function initializeTheme() {
 
   const btn =
     document.getElementById(

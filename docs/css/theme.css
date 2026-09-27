@@ -1,10 +1,18 @@
- /* ===== THEME ===== */
+ /* ==================================================
+   THÈME CLAIR (PAR DÉFAUT)
+   ================================================== */
     :root{
       --bg: #f5f7fb;
       --text: #333;
       --card: white;
       --primary: #007BFF;
     }
+
+    /* ==================================================
+   THÈME SOMBRE
+   Variable* écrasées automatiquement lorsque
+   body[data-theme="dark"] est appl*qué.
+   ================================================== */
 
 body[data-theme="dark"] {
       --bg: #121212;

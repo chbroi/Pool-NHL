@@ -1,6 +1,29 @@
 
+/* ================================*=================
+   POOL STATISTIcS RENDERER
+
+   Analyse statistique des prédictions
+   des participants.
+
+   Responsabilités :
+   - Tendances du pool
+   - Choix populaires
+   - Choix uniques
+   - Consensus général
+   - Pronostic collectif
+
+   ================================================== */
 import { getAllPredictions } from "../../services/firestoreService.js";
 
+/*
+   Génère les statistiques globales
+   du pool à partir de toutes les
+   prédictions enregistrées.
+
+   Cette page permet notamment
+   d'identifier les favoris du pool
+   et les prédictions uniques.
+*/
 export async function renderStats() {
 
   const container =
@@ -40,7 +63,9 @@ export async function renderStats() {
   });
 
   const totalPredictions =
-    predictions.length;
+  predictions.filter(
+    p => p.userId !== "randomNoob"
+  ).length;
 
   const favoriteCup =
     Object.entries(stanleyPicks)

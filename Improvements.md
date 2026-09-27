@@ -3,247 +3,292 @@
 ## ✅ Complété
 
 ### Architecture
+
 - Migration vers une architecture modulaire ES6
 - Séparation des responsabilités :
-  - `main.js`
+  - `app`
+  - `auth`
   - `services`
   - `ui`
   - `logic`
   - `utils`
   - `constants`
 - Centralisation de l'état dans `appState`
+- Réexport centralisé des renderers
 
 ### Authentification
+
 - Connexion Google Firebase
 - Déconnexion
 - Gestion du statut utilisateur
-- Règles Firestore sécurisées
-- Sauvegarde de l'acceptation des règlements dans Firestore
+- Gestion des administrateurs
+- Sauvegarde de l'acceptation des règlements
+- Gestion du profil utilisateur
+
+### Temps réel
+
+- Synchronisation Firestore en temps réel
+- Mise à jour automatique du classement
+- Mise à jour automatique des résultats
+- Mise à jour automatique des participants
+- Mise à jour automatique de la configuration
+- Mise à jour automatique des commentaires administrateurs
+- Rafraîchissement intelligent des pages
 
 ### Interface
+
 - Mode sombre / clair
 - Navigation dynamique
-- Affichage responsive de base
-- Mise en évidence de la colonne de l'utilisateur connecté
-
-### Pool
-- Soumissions enregistrées dans Firestore
-- Génération dynamique des rondes
-- Classement automatique
-- Calcul automatique des scores
-- Affichage dynamique des résultats
+- Affichage responsive
+- Mise en évidence de la colonne du participant connecté
+- Profil utilisateur
+- Compte à rebours des dates limites
+- Messages contextuels dynamiques
 
 ### Participation
+
+- Validation de l'acceptation des règlements
+- Suivi des paiements
+- Carte de participation sur l'accueil
 - Comptage automatique des participants
 - Calcul automatique de la cagnotte
+- Calcul automatique des gains projetés
+
+### Soumissions
+
+- Génération dynamique des rondes
+- Validation des choix
+- Modification des soumissions existantes
+- Sauvegarde Firestore
+- Validation du Conn Smythe
+- Génération automatique des rondes futures
+
+### Pointage
+
+- Calcul automatique des scores
+- Gestion multi-soumissions
+- Classement global
+- Calcul détaillé des points
+- Pointage configurable via `SCORING`
+
+### Résultats
+
+- Affichage détaillé des prédictions
+- Validation visuelle des choix
+- Totaux par soumission
+- Total global
+- Affichage des logos NHL
+- Affichage dynamique des affrontements
+
+### Statistiques
+
+#### Pool
+
+- Favoris pour la Coupe Stanley
+- Favoris Conn Smythe
+- Pronostic collectif du pool
+- Choix uniques
+- Analyse du consensus
+
+#### NHL
+
+- Classement des pointeurs
+- Classement des buteurs
+- Classement des passeurs
+- Statistiques des gardiens
+- Saison régulière
+- Séries éliminatoires
+
+### Administration
+
+- Gestion des paiements
+- Gestion des commentaires
+- Journal administratif
+- Gestion des dates limites
+- Ouverture/Fermeture des soumissions
+- Gestion de la ronde active
+- Suppression de soumissions
+- Gestion du Conn Smythe officiel
+- Génération du joueur fictif Random Noob
+
+### Outils d'administration
+
+- Scripts Python de synchronisation NHL
+- Mise à jour automatique des joueurs actifs
+- Mise à jour automatique des résultats
+- Génération automatique des affrontements de ronde 1
+- Gestion de la structure officielle des séries
 
 ---
 
 # 🔥 Priorité Haute
 
-## Soumissions
+## Fiabilité
 
-- Corriger les problèmes actuels de l'onglet **Soumettre**
-- Vérifier le cycle complet :
-  - Connexion
-  - Acceptation des règlements
-  - Génération des rondes
-  - Validation des choix
-  - Soumission Firestore
-- Éviter les écrans vides
-- Ajouter des messages d'erreur explicites
-- Ajouter une validation visuelle avant soumission
-- Ajouter un écran de confirmation après soumission
-- Empêcher les doubles clics sur **Soumettre**
-- Ajouter un indicateur de chargement lors des opérations Firestore
-- Ajouter une validation complète avant envoi
-- Vérifier que toutes les rondes affichées sont cohérentes avec les choix précédents
+### Optimisation
 
-## Participation
+- Utiliser davantage `appState`
+- Réduire les lectures Firestore inutiles
+- Optimiser le calcul du classement
+- Réduire le nombre de rafraîchissements complets
 
-- Modal professionnel d'acceptation des règlements
-- Afficher le modal uniquement lors de la première participation
-- Sauvegarder l'acceptation dans Firestore
-- Créer la collection `participants`
-- Associer chaque document au `uid` Firebase
-- Vérifier automatiquement si un utilisateur a accepté les conditions
+### Sécurité
 
-### Carte de participation sur l'accueil
+- Vérifier toutes les permissions administrateur
+- Renforcer les règles Firestore
+- Empêcher l'exécution non autorisée des actions admin
 
-Afficher :
+### Soumissions
 
-```text
-✅ Participation confirmée
-
-Bienvenue Charles Brosseau.
-
-Votre engagement de participation a déjà été enregistré.
-```
-
-ou
-
-```text
-⚠️ Participation non confirmée
-
-Pour participer au pool, vous devrez accepter les conditions lors de votre première soumission.
-```
-
-### Cagnotte
-
-- Afficher le nombre de participants
-- Afficher la cagnotte actuelle
-- Afficher automatiquement les montants projetés :
-
-```text
-🥇 1re place
-🥈 2e place
-🥉 3e place
-```
+- Désactiver le bouton pendant l'envoi
+- Ajouter un indicateur de chargement
+- Validation visuelle améliorée
+- Messages d'erreur plus explicites
 
 ---
 
 # 🟡 Priorité Moyenne
 
-## Expérience utilisateur
-
-- Permettre l'accès sans connexion à :
-  - Accueil
-  - Règlements
-  - Système de pointage
-  - Résultats
-  - Classement
-
-- Conserver uniquement l'onglet **Soumettre** protégé
-- Masquer l'onglet **Soumettre** lorsqu'aucun utilisateur n'est connecté
-- Ajouter une carte "Comment participer"
-- Ajouter de légères animations entre les onglets
-- Ajouter un bouton "Retour en haut"
-- Ajouter un meilleur feedback visuel pendant les chargements
-
 ## Mes prédictions
 
-- Ajouter un onglet **Mes prédictions**
-- Afficher l'historique complet des soumissions
-- Afficher les résultats ronde par ronde
-- Afficher les points obtenus pour chaque choix
-- Afficher les choix gagnants/perdants visuellement
-- Comparer les choix de l'utilisateur avec les résultats réels
+Créer un nouvel onglet :
 
-## Résultats
+```text
+📋 Mes prédictions
+```
 
-- Corriger définitivement l'affichage des matchups ronde 1
-- Corriger les doublons d'affichage des matchs joués
-- Corriger les affichages du nombre de matchs
-- Ajouter les logos des équipes
-- Mettre les équipes gagnantes en évidence
-- Ajouter un résumé de la ronde actuelle
-- Afficher le pourcentage de participants ayant choisi chaque équipe
-- Afficher les statistiques de popularité des choix
+Fonctionnalités :
+
+- Historique complet
+- Résultats détaillés
+- Points obtenus
+- Comparaison avec les résultats réels
+- Évolution du score personnel
+
+## Expérience utilisateur
+
+- Conserver uniquement l'onglet Soumettre protégé
+- Améliorer les animations
+- Ajouter un bouton Retour en haut
+- Ajouter des indicateurs de chargement
+
+## Analyse du pool
+
+Afficher :
+
+- Équipe la plus populaire
+- Équipe la moins populaire
+- Choix les plus risqués
+- Prédictions uniques
+- Distribution des choix par ronde
+
+## Administration
+
+- Gestion complète des saisons
+- Outils de correction de données
+- Réimportation des résultats NHL
 
 ---
 
 # 🟢 Priorité Basse
 
-## Administration
+## Multi-saisons
 
-Créer un mode administrateur basé sur Firebase.
-
-Collection :
+Préparer :
 
 ```text
-admins
- └── uid
+2025-2026
+2026-2027
+2027-2028
 ```
 
 Fonctionnalités :
 
-- Modifier les résultats
-- Ouvrir/Fermer les soumissions
-- Modifier le message d'accueil
-- Modifier la ronde active
-- Modifier les dates limites
-- Modifier les matchups
-- Modifier les informations publiques du pool
+- Archives complètes
+- Classements historiques
+- Gagnants précédents
+- Consultation d'anciennes saisons
 
-## Historique
+## Export
 
-Préparer la gestion multi-saisons.
+Ajouter :
 
-Exemples :
+- Export CSV
+- Export Excel
+- Export PDF
 
-```text
-2025
-2026
-2027
-```
+Pour :
 
-Fonctionnalités :
+- Classement
+- Participants
+- Résultats
+- Statistiques
 
-- Archives des saisons
-- Archives des gagnants
-- Archives des classements
-- Historique des participations
-- Navigation entre les saisons
+## Automatisation
+
+- Mise à jour quotidienne automatique des statistiques NHL
+- Tâches planifiées Windows
+- Synchronisation des résultats NHL
+- Gestion automatique des joueurs actifs
 
 ---
 
-# 🚀 Améliorations "Wow"
+# 🚀 Améliorations
 
-## Statistiques des participants
+## Évolution du classement
 
 Afficher :
 
 ```text
-🔥 Choix les plus populaires
-
-TOR : 78 %
-FLA : 65 %
-DAL : 54 %
-EDM : 82 %
+Progression des participants
+par ronde et par date
 ```
 
-## Choix audacieux
+avec graphique interactif.
+
+## Hall of Fame
 
 Afficher :
 
 ```text
-💀 Choix les plus risqués
-
-Jean Tremblay
-Choisit OTT contre TOR
+Champions des saisons précédentes
 ```
 
-## Informations dynamiques
+avec :
 
-Afficher sur l'accueil :
+- gagnant
+- score final
+- nombre de participants
+
+## Statistiques avancées
+
+Afficher :
 
 ```text
-🏒 37 participants
-
-💰 Cagnotte : 185 $
-
-🥇 1re place : 106 $
-🥈 2e place : 53 $
-🥉 3e place : 26 $
+Choix les plus populaires
+Choix les plus audacieux
+Choix les plus payants
 ```
 
-## Engagement du public
+## Activité récente
 
-- Compteur de participants en temps réel
-- Activité récente
-- Derniers participants inscrits
-- Progression des rondes
-- Statistiques globales du pool
+Afficher :
+
+```text
+Dernières soumissions
+Derniers participants
+Commentaires récents
+```
+
+## Random Noob avancé
+
+Ajouter :
+
+```text
+🎲 Random Noob
+📊 Random Expert
+🔥 Favori du public
+💀 Chaos Mode
+```
 
 ---
-
-# 🎯 Prochaines étapes recommandées
-
-1. Finaliser la gestion de l'acceptation des règlements via Firestore
-2. Corriger complètement l'onglet **Soumettre**
-3. Rendre les pages publiques accessibles sans connexion
-4. Ajouter la carte de statut de participation sur l'accueil
-5. Créer l'onglet **Mes prédictions**
-6. Corriger l'affichage des résultats de ronde 1
-7. Ajouter le calcul automatique de la cagnotte et des gains
-8. Développer éventuellement un panneau d'administration

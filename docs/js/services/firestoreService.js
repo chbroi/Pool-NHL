@@ -1,15 +1,39 @@
+/* ===================*==============================
+   FIRESTORE SERVICE
 
+   Couche d'accès aux données Firestore.
+
+   Responsabilités :
+   - Gestion des prédictions
+   - Gestion des participants
+   - Gestion des commentaires
+   - Gestion des joueurs NHL
+   - Gestion du journal administratif
+
+   Toutes les fonctions de ce module
+   effectuent des lectures ou écritures
+   directes dans Firestore.
+
+   ================================================== */
 import { db } from "../firebase.js";
 import { appState } from "../app/state.js";
 import { collection, query, where, getDocs, addDoc, updateDoc,doc} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 
-/**
- * Obtenir toutes les prédictions
- */
+/*
+   Récupère toutes les prédictions
+   de la saison active.
+
+   Utilisé notamment pour :
+   - le classement
+   - les statistiques
+   - les résultats détaillés
+*/
 export async function getAllPredictions() {
 
-  const snapshot = await getDocs( collection(db, "predictions"));
+  const q = query(collection(db,"predictions"),
+  where("season","==",appState.currentSeason));
+  const snapshot = await getDocs(q);
   return snapshot.docs.map(
     doc => ({
       id: doc.id,
@@ -18,17 +42,18 @@ export async function getAllPredictions() {
   );
 }
 
-
-/**
- * Vérifier si utilisateur a déjà soumis pour un round
- */
+/*
+   Vérifie si un utilisateur possède déjà
+   une soumission pour la ronde demandée.
+*/
 export async function hasSubmitted(userId, round) {
 
   const q = query(
     collection(db, "predictions"),
+    where("season", "==", appState.currentSeason),
     where("userId", "==", userId),
     where("round", "==", round)
-  );
+ );
 
   const snapshot = await getDocs(q);
 
@@ -36,15 +61,19 @@ export async function hasSubmitted(userId, round) {
 }
 
 
-/**
- * Soumettre une prédiction
- */
+/*
+   Enregistre une nouvelle soumission
+   dans Firestore.
+*/
 export async function submitPrediction(data) {
 
   return await addDoc(collection(db, "predictions"), data);
 }
 
-
+/*
+   Récupère tous les commentaires transmis
+   par les participants.
+*/
 export async function getAllFeedback() {
 
   const snapshot =
@@ -64,6 +93,10 @@ export async function getAllFeedback() {
 
 }
 
+/*
+   Retourne la liste complète des participants
+   enregistrés dans le système.
+*/
 export async function getAllParticipants() {
 
   const snapshot =
@@ -81,12 +114,26 @@ export async function getAllParticipants() {
     })
   );
 }
+/*
+   Charge les statistiques des joueurs
+   de la saison active dans appState.
 
+   Ces données servent principalement
+   au choix du Conn Smythe et aux statistiques NHL.
+*/
 export async function loadPlayers() {
 
-    const snapshot = await getDocs(
-        collection(db, "players")
+    const q = query(
+        collection(db, "players"),
+        where(
+            "season",
+            "==",
+            appState.currentSeason
+        )
     );
+
+    const snapshot =
+        await getDocs(q);
 
     appState.players =
         snapshot.docs.map(
@@ -94,6 +141,10 @@ export async function loadPlayers() {
         );
 }
 
+/*
+   Récupère l'historique des actions
+   administratives.
+*/
 export async function getAdminLogs() {
 
   const snapshot =
@@ -113,6 +164,10 @@ export async function getAdminLogs() {
 
 }
 
+/*
+   Ajoute une entrée dans le journal
+   administratif.
+*/
 export async function addAdminLog( action, admin) {
 
   return await addDoc(
@@ -128,13 +183,20 @@ export async function addAdminLog( action, admin) {
   );
 
 }
-  export async function getPrediction(userId,
-  round) {
+
+/*
+   Recherche une prédiction spécifique
+   à un utilisateur, une ronde
+   et une saison.
+*/
+export async function getPrediction(userId,
+  round,season) {
 
   const q = query(
     collection(db, "predictions"),
     where("userId", "==", userId),
-    where("round", "==", round)
+    where("round", "==", round),
+    where("season","==",season)
   );
 
   const snapshot =
@@ -151,6 +213,9 @@ export async function addAdminLog( action, admin) {
 
 }
 
+/*
+   Met à jour une prédiction existante.
+*/
 export async function updatePrediction(docId, data) {
 
   await updateDoc(doc(db,"predictions",docId),data);

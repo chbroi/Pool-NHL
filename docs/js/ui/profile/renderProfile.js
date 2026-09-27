@@ -1,8 +1,26 @@
+/* =========================*========================
+   PROFIL* RENDERER
+
+   Affichage du profil participant.
+
+   Responsabilités :
+   - Informations utilisateur
+   - Statut de participation
+   - Progression dans le pool
+   - Soumissions effectuées
+   - Envoi de commentaires
+
+   ================================================== */
 import { appState } from "../../app/state.js";
 import { getAllPredictions } from "../../services/firestoreService.js";
 import { computeLeaderboard } from "../../logic/scoring.js";
 
+/*
+   Génère la page profil de l'utilisateur.
 
+   Présente un résumé complet de sa
+   participation au pool.
+*/
 export async function renderProfile() {
 
   const container =
@@ -30,12 +48,12 @@ export async function renderProfile() {
     );
   const myRank =
   leaderboard.findIndex(
-    p => p.userId === appState.user.uid
+    p => p.id === appState.user.uid
   ) + 1;
   const myEntry =
-    leaderboard.find(
-      p => p.userId === appState.user.uid
-    );
+  leaderboard.find(
+    p => p.id === appState.user.uid
+  );
   const myScore =
     myEntry?.score ?? 0;
   
@@ -91,7 +109,7 @@ export async function renderProfile() {
       </p>
       
       <p>
-        <strong>📈 Points :</strong>
+        <strong>📈 Points totaux :</strong>
         ${myScore}
       </p>
 
@@ -160,6 +178,15 @@ export async function renderProfile() {
   `;
 }
 
+/*
+   Affiche l'état détaillé des soumissions.
+
+   Permet de visualiser rapidement :
+   - les rondes complétées
+   - la soumission active
+   - les dates limites
+   - l'historique personnel
+*/
 export async function renderSubmissionStatus() {
 
   const container =

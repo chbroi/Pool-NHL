@@ -1,10 +1,28 @@
+/* ==================================================
+   TAB NAVIGATION
+
+   Gestion de la navigation de l'application.
+
+   Responsabilités :
+   - changement d'onglet
+   - validation des accès
+   - mise en évidence de l'onglet actif
+   - chargement du contenu associé
+
+   ================================================== */
+
 import { appState } from "./state.js";
-import * as funcs from "../functions.js";
+import { isSubmissionOpen } from "../utils/helpers.js";
 import { TABS } from "../constants.js";
 import { showRulesModal } from "./rulesModal.js";
 import { renderHome, renderScoring, renderProfile, renderStats, renderAdmin, renderNhlStats, loadPredictionsDetails, renderFullLeaderboard, renderSubmissionStatus} from "../ui/render.js";
 import { loadExistingSubmission } from "../services/predictionService.js";
+import { showWarning} from "../ui/dialogs.js";
 
+/*
+   Association entre les onglets et les
+   fonctions responsables de leur rendu.
+*/
 const tabRenderers = { 
   home: () => renderHome(),
   results: () => loadPredictionsDetails(),
@@ -18,11 +36,17 @@ const tabRenderers = {
   submit: () => handleSubmitTab()
 };
 
+/*
+   Prépare l'onglet de sou*ission.
+
+   Vérifie :
+   - l'accep*ation des règlements
+   - l'ouvert*re des soumissions
+   - l'existenc* d'une soumission précédente
+
+   Charge ensuite les données sauvegardées.
+*/
 async function handleSubmitTab() {
-   console.log(
-    "acceptedRules",
-    appState.acceptedRules
-  );
     if (!appState.acceptedRules) {
         showRulesModal();
         return;
@@ -33,8 +57,8 @@ async function handleSubmitTab() {
   
     if (!form || !tab) return;
 const currentDeadline = appState[`round${appState.submission}Deadline`];
-const deadlinePassed = currentDeadline && Date.now() > currentDeadline;
-if (!funcs.isSubmissionOpen()) {
+
+if (!isSubmissionOpen()) {
   
   tab.innerHTML = `
     <div class="card">
@@ -107,6 +131,9 @@ if (!funcs.isSubmissionOpen()) {
       form.style.display = "block";
     }  
 
+/*
+   Affiche l'onglet des règlements.
+*/    
 function handleRulesTab() {
 
  document
@@ -115,6 +142,10 @@ function handleRulesTab() {
 
 }
 
+/*
+   Met visuellement en évidence
+   l'onglet actuellement sélectionné.
+*/
 function updateActiveTab(tabName) {
 
   document
@@ -135,6 +166,10 @@ function updateActiveTab(tabName) {
   }
 }
 
+/*
+   Affiche ou masque le message d'aide
+   selon l'onglet actif.
+*/
 function toggleHelperMessage(tabName) {
 
   const helper =
@@ -149,13 +184,25 @@ function toggleHelperMessage(tabName) {
       : "none";
 
 }
+/**   Fonction centrale de navigation*
+
+   Vérifie les permissions d'accès,
+   masque les autres onglets puis
+   déclenche le rendu de l'*nglet demandé.
+
+   Le dernier onglet visité est conservé
+   dans le stockage local du navigateur.
+*/
 export async function showTab(tabName) {
   
   localStorage.setItem("activeTab",tabName);
   if (!appState.user && (tabName === "submit"|| tabName === "profile" )) {
 
-      alert("Connecte-toi pour participer.");
-    
+      await showWarning(
+            "Attention!",
+            "Connecte-toi pour participer."
+          );
+
       showTab("home");
       return;
   }

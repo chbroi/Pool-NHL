@@ -1,26 +1,60 @@
+/* ==================================================
+   HOME RENDERER
+
+   Génération de la page d'accueil du pool.
+
+   Responsabilités :
+   - Statistiques générales
+   - État de participation
+   - Podium actuel
+   - Résumé de la progression utilisateur
+   - Navigation rapide vers les sections clés
+
+   ================================================== */
 import { appState } from "../../app/state.js";
-import { getAllPredictions, getAllParticipants} from "../../services/firestoreService.js";
-import { computeLeaderboard} from "../../logic/scoring.js";
 import { POOL_CONFIG } from "../../constants.js";
 
+/*
+   Génère la page d'accueil.
+
+   L'accueil est adapté selon l'état de
+   connexion et de participation de
+   l'utilisateur.
+*/
 export async function renderHome() {
   
-  const predictions = await getAllPredictions();
+  const predictions =  appState.predictions || [];
   
   const participants = new Set(
-    predictions.map(p => p.userId)
-    );
-  const allParticipants =  await getAllParticipants();  
+  predictions
+    .filter(
+      p => p.userId !== "randomNoob"
+    )
+    .map(
+      p => p.userId
+    )
+);
+  const allParticipants =  appState.participants || [];  
+  /* =======*==================================*=======
+   STATISTIQUES DU POOL
+  *==================================*=============== */
   const participantCount = participants.size;
   const prizePool = participantCount * POOL_CONFIG.entryFee;
-  const paidCount =  allParticipants.filter(p => p.paid).length;
+  const paidCount =
+  allParticipants
+    .filter(
+      p =>
+        p.paid &&
+        p.userId !== "randomNoob"
+    )
+    .length;
   const actualPrize =  paidCount *POOL_CONFIG.entryFee
   const firstPlace = (prizePool * POOL_CONFIG.payout.first).toFixed(2);
   const secondPlace =  (prizePool * POOL_CONFIG.payout.second).toFixed(2);
   const thirdPlace = (prizePool * POOL_CONFIG.payout.third).toFixed(2);
   
-  const leaderboard = await computeLeaderboard(predictions,
-    appState.results);
+  const leaderboard =
+  appState.leaderboard || [];
   
   
     const container = document.getElementById("homeTab");
@@ -45,7 +79,9 @@ export async function renderHome() {
   </div>
   `;
   
-    
+  /* ==================*===============================
+   ÉTAT DE PARTICIPATION
+   =========*==================================*===== */
     if (appState.user) {
   
     if (!appState.acceptedRules) {
@@ -149,10 +185,12 @@ export async function renderHome() {
     `;
   }
   }   
-      
+  /* ==================================================
+   PODIUM ACTUEL
+   ================================================== */
    const top3 =
     leaderboard.slice(0,3);
-  
+
   container.innerHTML += `
   
     <div class="card">
@@ -197,10 +235,12 @@ export async function renderHome() {
   
     const userIndex =
       leaderboard.findIndex(
-        p => p.name ===
-        appState.user.displayName
-      );
-  
+  p => p.id ===
+  appState.user.uid
+)
+/* ==================================================
+   PROGRESSION UTILISATEUR
+   ================================================== */
     const user =
       leaderboard[userIndex];
   
@@ -254,7 +294,9 @@ export async function renderHome() {
   
     }
   }
-    
+  /* ==================================================
+   NAVIGATION RAPIDE
+   ================================================== */  
   container.innerHTML += `
     <div class="card">
       <h3>ℹ️ Comment utiliser le pool</h3>

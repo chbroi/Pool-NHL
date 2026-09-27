@@ -1,6 +1,28 @@
+/* ========================*=========================
+   FEEDBACK
+
+   Gestion des commentaires transmis
+   par les participants.
+
+   Responsabilités :
+   - Validation des commentaires
+   - Enregistrement dans Firestore
+   - Confirmation à l'utilisateur
+
+   ================================================== */
 import { appState } from "../app/state.js";
 import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { db } from "../firebase.js";
+import { showSuccess,showWarning,showError} from "../ui/dialogs.js";
+
+/*
+   Soumet un commentaire ou une suggestion
+   associée à l'utilisateur connecté.
+
+   Les commentaires sont enregistrés dans
+   Firestore afin d'être consultés depuis
+   l'interface administrateur.
+*/
 
 export async function submitFeedback() {
 
@@ -14,7 +36,8 @@ export async function submitFeedback() {
 
   if (!message) {
 
-    alert(
+    await showWarning(
+      "Commentaire vide",
       "Veuillez entrer un commentaire."
     );
 
@@ -34,9 +57,12 @@ export async function submitFeedback() {
       }
     );
 
-    alert(
-      "Merci pour votre commentaire !"
+
+    await showSuccess(
+      "Merci !",
+      "Votre commentaire a été envoyé."
     );
+
 
     document.getElementById(
       "profileComment"
@@ -44,10 +70,9 @@ export async function submitFeedback() {
 
   } catch (err) {
 
-    console.error(err);
-
-    alert(
-      "Erreur lors de l'envoi du commentaire."
+    await showError(
+      "Erreur:",
+      err.message
     );
 
   }

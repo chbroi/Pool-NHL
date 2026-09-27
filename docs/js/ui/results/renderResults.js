@@ -1,3 +1,19 @@
+/* ==================================================
+   RESULTS RENDERER
+
+   Affichage détaillé des résultats du pool.
+
+   Responsabilités :
+   - Comparaison des prédictions
+   - Calcul visuel des points
+   - Historique des soumissions
+   - Totaux par ronde
+   - Totaux globaux
+
+   Ce module constitue la vue la plus
+   détaillée du système de pointage.
+
+   ================================================== */
 import { appState } from "../../app/state.js";
 import { getAllPredictions} from "../../services/firestoreService.js";
 import { computeLeaderboard, getRoundFromKey } from "../../logic/scoring.js";
@@ -6,6 +22,16 @@ import { getRound1Matchups } from "../../services/matchService.js";
 import { SCORING, MATCH_ORDER,getTeamLogo } from "../../constants.js";
 
 
+/*
+   Génère la vue comp*ète des résultats.
+
+   Affiche pour chaque soumission :
+   - les résultats officiels
+   - les prédictions de chaque participant
+   - le détail des points obtenus
+   - les totaux intermédiaires
+   - le total général
+*/
 export async function loadPredictionsDetails() {
 
   const round1Matchups = await getRound1Matchups();
@@ -34,9 +60,12 @@ export async function loadPredictionsDetails() {
   
   container.innerHTML = `<h2>📊 Résultats</h2>`;
 
+  /*
+   Regroupement des prédictions
+   par ronde de soumission.
+*/
   const submissions = {};
 
-  // Regrouper
   predictions.forEach(data => {
     
     if (!submissions[data.round]) {
@@ -56,11 +85,35 @@ export async function loadPredictionsDetails() {
 
   // Tous les users
   
-  const orderedUsers = leaderboard.map(u => ({
-    id: u.id,
-    name: u.name,
-    score: u.score
-  }));
+  const currentUserId =
+  appState.user?.uid;
+
+const currentUser =
+  leaderboard.find(
+    u => u.id === currentUserId
+  );
+
+const randomNoob =
+  leaderboard.find(
+    u => u.id === "randomNoob"
+  );
+
+const others =
+  leaderboard.filter(
+    u =>
+      u.id !== currentUserId &&
+      u.id !== "randomNoob"
+  );
+
+const orderedUsers = [
+
+  ...(currentUser ? [currentUser] : []),
+
+  ...(randomNoob ? [randomNoob] : []),
+
+  ...others
+
+];
 
 
   Object.values(submissions).forEach(roundUsers => {
@@ -76,6 +129,9 @@ export async function loadPredictionsDetails() {
     4: MATCH_ORDER.filter(k => k.startsWith("R4"))
   };
 
+  /**   Accumulation du score total
+   sur l'ensemble des soumissions.
+*/
   const globalScores = {};
 
   Object.keys(submissions).map(Number).sort((a,b)=>a-b).forEach(round => {
@@ -250,7 +306,10 @@ export async function loadPredictionsDetails() {
       });
       
     });
-    // ✅ Conn Smythe
+    /*
+      Évaluation du choix Conn Smythe
+      pour chaque participant.
+    */
     html += `<tr>
       <td>🏆 Conn Smythe</td>
       <td>${appState.results["Conn_Smythe"] || "-"}</td>
@@ -320,14 +379,19 @@ export async function loadPredictionsDetails() {
     html += `</table></div><br>`;
     container.innerHTML += html;
     
-orderedUsers.sort((a, b) => {
-  return (globalScores[b.id] || 0) - (globalScores[a.id] || 0);
-});
+
 
   });
 }
 
+/*
+   Génère dynamiquement le formulaire
+   de prédiction d'une ronde.
 
+   Les affrontements sont construits
+   à partir des résultats connus ou
+   des choix déjà effectués.
+*/
 export async function generateRound(roundNumber) {
 
   const container = document.getElementById(`round${roundNumber}`);
@@ -415,11 +479,73 @@ export async function generateRound(roundNumber) {
   container.style.display = "block";
 }
 
+/*
+   Affiche les règles officielles
+   de pointage du pool.
+
+   Les valeurs sont directement basées
+   sur la configuration SCORING.
+*/
 export function renderScoring() {
 
   const container = document.getElementById("scoringTab");
 
   container.innerHTML = `<h2>📊 Système de pointage</h2>`;
+  container.innerHTML += `
+
+<div class="card">
+
+  <h3>
+    🎯 Principe du pool
+  </h3>
+
+  <p>
+
+    Plus une prédiction est faite tôt dans les séries,
+    plus elle vaut de points.
+
+  </p>
+
+  <p>
+
+    Exemple pour le champion de la Coupe Stanley :
+
+  </p>
+
+  <ul>
+
+    <li>
+      Soumission 1 :
+      Champion correct = 8 pts
+    </li>
+
+    <li>
+      Soumission 2 :
+      Champion correct = 4 pts
+    </li>
+
+    <li>
+      Soumission 3 :
+      Champion correct = 2 pts
+    </li>
+
+    <li>
+      Soumission 4 :
+      Champion correct = 1 pt
+    </li>
+
+  </ul>
+
+  <p>
+
+    ✅ Le risque est récompensé lorsque la prédiction
+    est faite avant que les séries avancent.
+
+  </p>
+
+</div>
+
+`;
 
   Object.entries(SCORING.submissions).forEach(([sub, config]) => {
 
@@ -435,5 +561,164 @@ export function renderScoring() {
 
     container.innerHTML += html;
 
-  });
+  })
+  ;
+  container.innerHTML += `
+
+<div class="card">
+
+  <h3>
+    💡 Exemple concret
+  </h3>
+
+    <p>
+    Soumission 1
+    </p>
+
+   Ronde 1 
+  <ul>
+
+    <li>
+      CAR en 6
+      (résultat : CAR en 6)
+      → ✅ 1 pt équipe + 2 pts matchs =3 points
+    </li>
+
+    <li>
+      DAL en 7
+      (résultat : DAL en 6)
+      → ✅ 1 pt équipe = 1 point
+    </li>
+
+    <li>
+      EDM en 5
+      (résultat : VGK en 6)
+      → ❌ 0 point
+    </li>
+
+    <li>
+      Conn Smythe correct
+      → ✅ 4 pts
+    </li>
+
+  </ul>
+
+  <p>
+
+    <strong>
+      Total : 8 pts
+    </strong>
+
+  </p>
+
+  <p>
+    Soumission 2
+  </p>  
+  Ronde 3
+  <ul>
+  
+    <li>
+      CAR en 6
+      (résultat : CAR en 6)
+      → ✅ 2 pts équipe + 2 pts matchs = 4 points
+    </li>
+
+    <li>
+      DAL en 7
+      (résultat : DAL en 6)
+      → ✅ 2 pts équipe = 2 points
+    </li>
+
+    <li>
+      EDM en 5
+      (résultat : VGK en 6)
+      → ❌ 0 pt
+    </li>
+
+    <li>
+      Conn Smythe correct
+      → ✅ 3 pts
+    </li>
+
+  </ul>
+
+  <p>
+
+    <strong>
+      Total : 9 pts
+    </strong>
+
+  </p>
+
+</div>
+
+`;
+}
+
+/*
+   Construit les affrontements d'une ronde
+   à partir des gagnants de la ronde
+   précédente.
+*/
+export async function getMatchupsForRound(
+  roundNumber,
+  source
+) {
+
+  if (roundNumber === 1) {
+    return await getRound1Matchups();
+  }
+
+  if (roundNumber === 2) {
+    return [
+      {
+        id: "R2_EST_1",
+        team1: source["R1_EST_1_team"],
+        team2: source["R1_EST_2_team"]
+      },
+      {
+        id: "R2_EST_2",
+        team1: source["R1_EST_3_team"],
+        team2: source["R1_EST_4_team"]
+      },
+      {
+        id: "R2_WEST_1",
+        team1: source["R1_WEST_1_team"],
+        team2: source["R1_WEST_2_team"]
+      },
+      {
+        id: "R2_WEST_2",
+        team1: source["R1_WEST_3_team"],
+        team2: source["R1_WEST_4_team"]
+      }
+    ];
+  }
+
+  if (roundNumber === 3) {
+    return [
+      {
+        id: "R3_EST_1",
+        team1: source["R2_EST_1_team"],
+        team2: source["R2_EST_2_team"]
+      },
+      {
+        id: "R3_WEST_1",
+        team1: source["R2_WEST_1_team"],
+        team2: source["R2_WEST_2_team"]
+      }
+    ];
+  }
+
+  if (roundNumber === 4) {
+    return [
+      {
+        id: "R4_final",
+        team1: source["R3_EST_1_team"],
+        team2: source["R3_WEST_1_team"]
+      }
+    ];
+  }
+
+  return [];
+
 }
