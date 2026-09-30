@@ -21,9 +21,8 @@ import { getParentMatch, isResultAvailable } from "../../utils/helpers.js";
 import { getRound1Matchups } from "../../services/matchService.js";
 import { SCORING, MATCH_ORDER,getTeamLogo } from "../../constants.js";
 
-
 /*
-   Génère la vue comp*ète des résultats.
+   Génère la vue complète des résultats.
 
    Affiche pour chaque soumission :
    - les résultats officiels
@@ -34,13 +33,86 @@ import { SCORING, MATCH_ORDER,getTeamLogo } from "../../constants.js";
 */
 export async function loadPredictionsDetails() {
 
+  const container = document.getElementById("resultsTab");
+  container.innerHTML = `
+    <div class="card">
+
+      <div class="subTabs">
+
+        <button
+          id="tableViewBtn"
+          class="actionBtn"
+          onclick="showResultsView('table')">
+          📊 Tableau
+        </button>
+
+        <button
+        id="bracketViewBtn"
+          class="actionBtn secondary"
+          onclick="showResultsView('bracket')">
+          🏒 Bracket
+        </button>
+
+      </div>
+
+      <div id="resultsTableView"></div>
+
+      <div
+  id="resultsBracketView"
+  style="display:none">
+
+  <div class="card">
+
+    <h3>🏒 Bracket</h3>
+
+    <div class="bracketControls">
+      <label>
+        Utilisateur
+      </label>
+
+      <select id="bracketUserSelect">
+
+        <option value="official">
+          Résultats officiels
+        </option>
+
+      </select>
+
+      <label id="submissionLabel">
+        Soumission
+      </label>
+
+      <select id="bracketSubmissionSelect">
+      </select>
+
+    </div>
+
+    <div id="playoffBracket"></div>
+
+  </div>
+
+</div>
+
+    </div>
+    `;
+
+  const tableContainer = document.getElementById( "resultsTableView");
   const round1Matchups = await getRound1Matchups();
+  appState.round1Matchups = round1Matchups;
+
   const round1Map = {};
   round1Matchups.forEach(m => {
     round1Map[m.id] = `${getTeamLogo(m.team1)}${m.team1} vs ${getTeamLogo(m.team2)}${m.team2}`;
   });
-  const container = document.getElementById("resultsTab");
   const predictions = await getAllPredictions();
+  if (predictions.length > 0) {
+    initializeBracket(predictions);
+  }
+  console.log(
+  document.getElementById(
+    "bracketUserSelect"
+  )
+);
   if (predictions.length === 0) {
 
   container.innerHTML = `
@@ -57,8 +129,6 @@ export async function loadPredictionsDetails() {
 }
   const leaderboard = await computeLeaderboard(predictions, appState.results);
   
-  
-  container.innerHTML = `<h2>📊 Résultats</h2>`;
 
   /*
    Regroupement des prédictions
@@ -377,7 +447,7 @@ const orderedUsers = [
     }
 
     html += `</table></div><br>`;
-    container.innerHTML += html;
+    tableContainer.innerHTML += html;
     
 
 
@@ -721,4 +791,838 @@ export async function getMatchupsForRound(
 
   return [];
 
+}
+
+
+export function showResultsView(view) {
+
+  const table =
+    document.getElementById(
+      "resultsTableView"
+    );
+
+  const bracket =
+    document.getElementById(
+      "resultsBracketView"
+    );
+
+  const tableBtn =
+    document.getElementById(
+      "tableViewBtn"
+    );
+
+  const bracketBtn =
+    document.getElementById(
+      "bracketViewBtn"
+    );
+
+  if (view === "table") {
+
+    table.style.display = "block";
+    bracket.style.display = "none";
+
+    tableBtn.classList.remove(
+      "secondary"
+    );
+
+    bracketBtn.classList.add(
+      "secondary"
+    );
+
+  }
+  else {
+
+    table.style.display = "none";
+    bracket.style.display = "block";
+
+    tableBtn.classList.add(
+      "secondary"
+    );
+
+    bracketBtn.classList.remove(
+      "secondary"
+    );
+
+  }
+}
+
+
+
+export function renderBracket(source,showPrediction=false,submission=1) {
+
+  const container =
+    document.getElementById(
+      "playoffBracket"
+    );
+
+  if (!container) return;
+
+  const r = source;
+
+  container.innerHTML = `
+
+<div class="playoffBracket">
+
+  
+  <div class="roundColumn">
+    <div class="roundTitle">
+      Ronde 1
+    </div>
+    <div class="
+  conference
+  ${submission > 1 ? 'lockedRound' : ''}
+">
+    ${renderSeriesCard(
+      buildSeries(
+        "R1_EST_1",
+        r,
+        appState.round1Matchups
+      ),showPrediction
+    )}
+
+    ${renderSeriesCard(
+      buildSeries(
+        "R1_EST_2",
+        r,
+        appState.round1Matchups
+      ),showPrediction
+    )}
+
+
+    ${renderSeriesCard(
+      buildSeries(
+        "R1_EST_3",
+        r,
+        appState.round1Matchups
+      ),showPrediction
+    )}
+
+    ${renderSeriesCard(
+      buildSeries(
+        "R1_EST_4",
+        r,
+        appState.round1Matchups
+      ),showPrediction
+    )}
+
+  </div>
+  </div>
+
+  
+  <div class="roundColumn">
+  <div class="roundTitle">
+      Ronde 2
+    </div>
+  <div class="
+  conference
+  ${submission > 2 ? 'lockedRound' : ''}
+">
+    ${renderSeriesCard(
+      buildSeries(
+        "R2_EST_1",
+        r,
+        appState.round1Matchups
+      ),showPrediction
+    )}
+
+    ${renderSeriesCard(
+      buildSeries(
+        "R2_EST_2",
+        r,
+        appState.round1Matchups
+      ),showPrediction
+    )}
+
+  </div>
+  </div>
+
+  
+  <div class="roundColumn">
+  <div class="roundTitle">
+      Finale de l'est
+    </div>
+  <div class="
+  conference
+  ${submission > 3 ? 'lockedRound' : ''}
+">
+    ${renderSeriesCard(
+      buildSeries(
+        "R3_EST_1",
+        r,
+        appState.round1Matchups
+      ),showPrediction
+    )}
+
+  </div>
+  </div>
+
+  
+  
+  <div class="roundColumn">
+  <div class="roundTitle">
+      Finale de la coupe Stanley
+    </div>
+  <div class="stanley">
+    ${renderSeriesCard(
+      buildSeries(
+        "R4_final",
+        r,
+        appState.round1Matchups
+      ),showPrediction
+    )}
+
+  </div>
+  </div>
+
+  
+  <div class="roundColumn">
+  <div class="roundTitle">
+      Finale de l'ouest
+    </div>
+  <div class="
+  conference
+  ${submission > 3 ? 'lockedRound' : ''}
+">
+    ${renderSeriesCard(
+      buildSeries(
+        "R3_WEST_1",
+        r,
+        appState.round1Matchups
+      ),showPrediction
+    )}
+
+  </div>
+  </div>
+
+  
+<div class="roundColumn">
+  <div class="roundTitle">
+      Ronde 2
+    </div>
+  <div class="
+  conference
+  ${submission > 2 ? 'lockedRound' : ''}
+">
+    ${renderSeriesCard(
+      buildSeries(
+        "R2_WEST_1",
+        r,
+        appState.round1Matchups
+      ),showPrediction
+    )}
+
+    ${renderSeriesCard(
+      buildSeries(
+        "R2_WEST_2",
+        r,
+        appState.round1Matchups
+      ),showPrediction
+    )}
+
+  </div>
+  </div>
+
+  
+<div class="roundColumn">
+  <div class="roundTitle">
+      Ronde 1
+    </div>
+  <div class="
+  conference
+  ${submission > 1 ? 'lockedRound' : ''}
+">
+    ${renderSeriesCard(
+      buildSeries(
+        "R1_WEST_1",
+        r,
+        appState.round1Matchups
+      ),showPrediction
+    )}
+
+    ${renderSeriesCard(
+      buildSeries(
+        "R1_WEST_2",
+        r,
+        appState.round1Matchups
+      ),showPrediction
+    )}
+
+    ${renderSeriesCard(
+      buildSeries(
+        "R1_WEST_3",
+        r,
+        appState.round1Matchups
+      ),showPrediction
+    )}
+
+    ${renderSeriesCard(
+      buildSeries(
+        "R1_WEST_4",
+        r,
+        appState.round1Matchups
+      ),showPrediction
+    )}
+
+  </div>
+  </div>
+
+</div>
+
+  `;
+}
+
+
+export async function initializeBracket (predictions) {
+
+  populateUserSelector (predictions);
+  attachBracketListeners(predictions);
+  renderSelectedBracket (predictions);
+}
+
+function populateUserSelector(
+  predictions
+) {
+
+  const select =
+    document.getElementById(
+      "bracketUserSelect"
+    );
+
+  const users =
+    new Map();
+
+  predictions.forEach(p => {
+
+    users.set(
+      p.userId,
+      p.userName
+    );
+
+  });
+
+  let html = `
+    <option value="official">
+      Résultats officiels
+    </option>
+  `;
+
+  users.forEach((name,id) => {
+
+    html += `
+      <option value="${id}">
+        ${name}
+      </option>
+    `;
+
+  });
+
+  select.innerHTML = html;
+
+  updateSubmissionSelector();
+}
+
+function updateSubmissionSelector(
+  predictions
+) {
+
+  const userId =
+    document.getElementById(
+      "bracketUserSelect"
+    ).value;
+
+  const select =
+    document.getElementById(
+      "bracketSubmissionSelect"
+    );
+
+  select.innerHTML = "";
+
+  if (userId === "official")
+    return;
+
+  const rounds =
+    [...new Set(
+
+      predictions
+        .filter(
+          p => p.userId === userId
+        )
+        .map(
+          p => p.round
+        )
+
+    )]
+    .sort((a,b)=>a-b);
+
+  rounds.forEach(round => {
+
+    select.innerHTML += `
+      <option value="${round}">
+        Soumission ${round}
+      </option>
+    `;
+
+  });
+
+}
+
+function attachBracketListeners(predictions) {
+
+  document
+    .getElementById(
+      "bracketUserSelect"
+    )
+    .addEventListener(
+      "change",
+      () => {
+
+        updateSubmissionSelector(
+          predictions
+        );
+
+        renderSelectedBracket(
+          predictions
+        );
+
+      }
+    );
+
+  document
+    .getElementById(
+      "bracketSubmissionSelect"
+    )
+    .addEventListener(
+      "change",
+      () =>
+        renderSelectedBracket(
+          predictions
+        )
+    );
+
+}
+
+function renderSelectedBracket(
+  predictions
+) {
+
+  const userId =
+    document.getElementById(
+      "bracketUserSelect"
+    ).value;
+    
+  const submissionLabel =
+  document.getElementById(
+    "submissionLabel"
+  );
+
+const submissionSelect =
+  document.getElementById(
+    "bracketSubmissionSelect"
+  );
+
+if (userId === "official") {
+
+  submissionLabel.style.display =
+    "none";
+
+  submissionSelect.style.display =
+    "none";
+
+}
+else {
+
+  submissionLabel.style.display =
+    "";
+
+  submissionSelect.style.display =
+    "";
+
+}
+  
+  const showPrediction =  userId !== "official";
+  const submission =
+    Number(
+      document.getElementById(
+        "bracketSubmissionSelect"
+      ).value
+    );
+
+  if (
+    userId === "official"
+  ) {
+
+    renderBracket(
+      appState.results,false,1
+    );
+
+    return;
+  }
+
+  const prediction =
+    predictions.find(
+      p =>
+        p.userId === userId &&
+        p.round === submission
+    );
+
+  if (!prediction) {
+
+    renderBracket(
+      appState.results,false,1
+    );
+
+    return;
+  }
+
+  const source =
+    buildHybridBracket(
+      prediction.picks
+    );
+
+  renderBracket(
+    source,showPrediction,submission
+);
+}
+
+function buildHybridBracket(
+  picks
+) {
+
+  const source = {
+
+    ...appState.results,
+
+    _prediction: picks
+
+  };
+
+  const submission =
+    Number(
+      document.getElementById(
+        "bracketSubmissionSelect"
+      ).value
+    );
+
+  const roundsToOverride = {
+
+    1:["R1","R2","R3","R4"],
+
+    2:["R2","R3","R4"],
+
+    3:["R3","R4"],
+
+    4:["R4"]
+
+  };
+
+  const allowed =
+    roundsToOverride[
+      submission
+    ];
+
+  Object.entries(
+    picks
+  ).forEach(
+    ([key,value]) => {
+
+      if (
+        allowed.some(
+          round =>
+            key.startsWith(
+              round
+            )
+        )
+      ) {
+
+        source[key] =
+          value;
+
+      }
+
+    }
+  );
+
+  return source;
+}
+
+function getSeriesScore( winner,team1,team2,games) {
+
+  if (!games) {
+
+    return {
+
+      team1Wins:"-",
+
+      team2Wins:"-"
+
+    };
+
+  }
+
+  const loserWins =
+    games - 4;
+
+  if (
+    winner === team1
+  ) {
+
+    return {
+
+      team1Wins:4,
+
+      team2Wins:loserWins
+
+    };
+
+  }
+
+  return {
+
+    team1Wins:loserWins,
+
+    team2Wins:4
+
+  };
+
+}
+
+function buildSeries(matchId, source, round1Map) {
+
+  let team1;
+  let team2;
+
+  const winner =
+  source[
+    `${matchId}_team`
+  ];
+
+  const games =
+    source[
+      `${matchId}_games`
+    ];
+
+  const predictedWinner =
+    source._prediction?.[
+      `${matchId}_team`
+    ];
+
+  const predictedGames =
+    source._prediction?.[
+      `${matchId}_games`
+    ];
+  const officialWinner = appState.results[
+    `${matchId}_team`
+  ];
+
+  const officialGames = appState.results[
+    `${matchId}_games`
+  ];
+  const teamCorrect = predictedWinner === officialWinner;
+  const gamesCorrect =  predictedWinner === officialWinner &&  Number(predictedGames) === Number(officialGames);
+  const officialResultAvailable =
+  !!officialWinner &&
+  !!officialGames;
+  if (matchId.startsWith("R1")) {
+
+    const matchup =
+      round1Map.find(
+        m => m.id === matchId
+      );
+
+    if (!matchup) return null;
+
+    team1 =
+      matchup.team1;
+
+    team2 =
+      matchup.team2;
+  }
+  else {
+
+    const parent1 =
+      getParentMatch(
+        matchId,
+        1
+      );
+
+    const parent2 =
+      getParentMatch(
+        matchId,
+        2
+      );
+
+    team1 =
+      source[
+        `${parent1}`
+      ];
+
+    team2 =
+      source[
+        `${parent2}`
+      ];
+      }
+
+      console.log({
+
+  matchId,
+
+  predictedWinner,
+
+  officialWinner,
+
+  predictedGames,
+
+  officialGames,
+
+  teamCorrect,
+
+  gamesCorrect
+
+});
+  return {
+
+  matchId,
+
+  team1,
+
+  team2,
+
+  winner,
+
+  games,
+
+  predictedWinner,
+
+  predictedGames,
+
+  officialGames,
+  
+  officialWinner,
+
+  teamCorrect,
+
+  gamesCorrect,
+
+  officialResultAvailable
+
+};
+
+}
+
+function renderSeriesCard( series, showPrediction,isLocked=false ) {
+  if (!series)
+    return "";
+
+  const {
+
+  team1,
+  team2,
+
+  winner,
+  games,
+  teamCorrect,
+  gamesCorrect,
+  officialResultAvailable
+
+  } = series;
+
+
+    let predictionIcon = "";
+
+    if (isLocked) {
+
+      predictionIcon = "🔒";
+
+    }
+    else if (!officialResultAvailable ) {
+
+      predictionIcon = "";
+
+    }
+    else if (teamCorrect && gamesCorrect) {
+
+      predictionIcon = "✅✅";
+
+    }
+    else if (teamCorrect) {
+
+      predictionIcon = "✅";
+
+    }
+    else {
+
+      predictionIcon = "❌";
+
+    }
+  const predictionHtml = 
+  showPrediction
+  ? `<div class="predictionResult">
+       ${predictionIcon}
+     </div>`
+
+  : "";
+
+  const score =
+    getSeriesScore(
+      winner,
+      team1,
+      team2,
+      games
+    );
+
+    const team1Winner =
+  winner === team1;
+
+const team2Winner =
+  winner === team2;
+
+  return `
+
+  <div class="seriesCard">
+
+    <div class="
+  teamRow
+  ${team1Winner ? 'winnerRow' : 'loserRow'}
+">
+
+      ${getTeamLogo(team1)}
+
+      <span>
+
+        ${team1}
+
+      </span>
+
+      <strong>
+
+        ${score.team1Wins}
+
+      </strong>
+
+    </div>
+
+    <div class="
+  teamRow
+  ${team2Winner ? 'winnerRow' : 'loserRow'}
+">
+
+      ${getTeamLogo(team2)}
+
+      <span>
+
+        ${team2}
+
+      </span>
+
+      <strong>
+
+        ${score.team2Wins}
+
+      </strong>
+
+    </div>
+      ${predictionHtml}
+    </div>
+
+  `;
 }

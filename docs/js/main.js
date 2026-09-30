@@ -22,6 +22,7 @@ import { submitFeedback } from "./profile/feedback.js";
 import { updateConnSmythePlayers } from "./services/nhlService.js";
 import { generateRandomNoob,updateConnSmytheWinner} from "./admin/adminActions.js";
 import { showTab } from "./app/tabs.js";
+import { showResultsView} from "./ui/results/renderResults.js";
 
 /* 
  Configuration des boutons d'authentification.
@@ -84,3 +85,4 @@ window.deleteFeedback = deleteFeedback;
 window.updateConnSmythePlayers = updateConnSmythePlayers;
 window.generateRandomNoob = generateRandomNoob;
 window.updateConnSmytheWinner =  updateConnSmytheWinner;
+window.showResultsView =  showResultsView;

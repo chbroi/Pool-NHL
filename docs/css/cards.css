@@ -154,3 +154,193 @@ accueil, profil, admin, résultats, règlements.
      cursor: not-allowed;
    
    }
+
+ .playoffBracket {
+
+  display:flex;
+
+  justify-content:flex-start;
+
+  gap:60px;
+
+  min-width:max-content;
+
+  padding:40px;
+
+}
+#playoffBracket {
+
+  overflow-x:auto;
+
+  width:100%;
+
+}
+
+.teamRow {
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:10px;
+
+  padding:6px 0;
+
+}
+
+.teamRow strong {
+
+  min-width:20px;
+
+  text-align:right;
+
+}
+
+.conference {
+
+  display:flex;
+
+  flex-direction:column;
+
+  justify-content:center;
+
+  height:100%;
+
+  gap:60px;
+
+}
+.stanley {
+
+  display:flex;
+
+  justify-content:center;
+
+  align-items:center;
+
+}
+
+.seriesCard {
+
+  min-width: 180px;
+
+  background: var(--card);
+
+  color: var(--text);
+
+  border: 1px solid var(--primary);
+
+  border-radius: 8px;
+
+  padding: 10px;
+
+  box-shadow:
+    0 2px 6px rgba(0,0,0,.15);
+
+}
+
+.seriesName {
+
+  font-weight:bold;
+
+  margin-bottom:8px;
+
+}
+
+.winner {
+
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+
+}
+
+.bracketControls select {
+
+  background: var(--card);
+
+  color: var(--text);
+
+  border: 1px solid var(--primary);
+
+  border-radius: 8px;
+
+  padding: 8px 12px;
+
+}
+
+.roundColumn {
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+
+}
+
+.roundTitle {
+
+  color:var(--primary);
+
+  font-size:18px;
+
+  font-weight:700;
+
+  margin-bottom:16px;
+
+  text-align:center;
+
+}
+
+.winnerRow {
+
+  color: var(--text);
+
+  font-weight: 700;
+
+}
+
+.loserRow {
+
+  opacity: .45;
+
+}
+
+.predictionResult {
+
+  margin-top:8px;
+
+  text-align:center;
+
+  font-size:18px;
+
+}
+
+.stanley .seriesCard {
+
+  border:2px solid gold;
+
+  box-shadow:
+    0 0 12px rgba(255,215,0,.4);
+
+}
+
+.lockedRound {
+
+  opacity: .35;
+
+  filter: grayscale(100%);
+
+}
+
+.predictionResult {
+
+  text-align:center;
+
+  margin-top:8px;
+
+  font-size:22px;
+
+}
